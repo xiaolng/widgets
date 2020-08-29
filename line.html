@@ -1,0 +1,82 @@
+<html>
+<body>
+	<table>
+	<tr>
+	  <th> <div id="lineplot"></div> </th>
+    </tr>
+    </table>
+
+</body>
+
+</html>
+
+<!-- load d3.js-->
+<script type="text/javascript", src="./js/d3/d3.js"></script>
+
+<script type="text/javascript">
+var margin = {top:50, right:50, bottom:50, left:50}
+var width = 600 - margin.left - margin.right
+var height = 500 - margin.top  - margin.bottom
+
+// append svg to body
+var svg = d3.select("#lineplot")
+			.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.style("background-color", "rgba(128, 255, 255, 0.2)")
+			.append("g")
+			.attr("transform", "translate(" + margin.left +", "+ margin.top +")")
+
+// add axis
+var x = d3.scaleLinear().domain([1, 100]).range([0, width])
+var y = d3.scaleLinear().domain([0, 13]).range([height, 0])
+var xAxis = d3.axisBottom(x).tickValues([25.5, 50, 75, 100]).tickFormat(d3.format(".1f"))
+
+svg.append("g").attr("transform", "translate(0, "+height+")").call(xAxis)
+svg.append("g").attr("transform", "translate(0, 0)").call(d3.axisLeft(y))
+
+//colormap
+var cmap = d3.scaleSequential(d3.interpolateReds).domain([0, 13])
+
+// plot line
+var plot = function(data){
+	
+	console.log(data[0])
+	
+	// plot scatter
+	svg.selectAll("circle")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("cx", d=>x(d.x))
+		.attr("cy", d=>y(d.y))
+		.attr("r", 3)
+		.style("fill", d=>cmap(d.y))
+
+	//plot line
+	line = d3.line().x(d=>x(d.x)).y(d=>y(d.y))
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.)
+      .attr("d", line)
+
+    //plot confidence area
+    area = d3.area().x(d=>x(d.x)).y0(d=>y(d.CI_right)).y1(d=>y(d.CI_left))
+
+    svg.append("path")
+    	.datum(data)
+    	.attr("fill", "rgba(128, 0, 128, 0.2)")
+    	.attr("stroke", "none")
+    	.attr("d", area)
+
+} 
+
+// read data and plot
+var data = d3.csv("./data/data_IC.csv").then( plot )
+
+// add text
+svg.append("text").attr("x", 200).attr("y", 0).text("Line plot")
+
+</script>
