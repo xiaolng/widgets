@@ -246,12 +246,11 @@ svg2.selectAll("mydots")
     			}
     	)
 
-var highlight2 = function(d){    
+//var highlight2 = function(d){    
 // first every group turns grey
-		console.log("hello")
-		d3.select(this).style("opacity", 0.1).attr("r", 15)
-    				} 
-
+//		console.log("hello")
+//		d3.select(this).style("opacity", 0.1).attr("r", 15)
+//    				} 
 svg2.selectAll("mylabels")
   .data(families)
   .enter()
@@ -273,8 +272,7 @@ svg2.selectAll("mylabels")
     			  .style("opacity", "1")
     			  .style("stroke-width", "2")
 
-    		}
-			)
+    		})
     .on("mouseleave", function(d){
 
 				d3.select(this).style("opacity", 1).style("stroke", "black").style("stroke-opacity", 0)
@@ -288,9 +286,8 @@ svg2.selectAll("mylabels")
 
     			// also make the dots stroke invisiable
     			d3.select("#dots"+d).style("stroke-opacity", 0)
-
     	} )
 
-// run update when page loaded
+// run update when page first loaded
 update(csvfile)
 </script>
