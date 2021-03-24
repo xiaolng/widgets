@@ -212,11 +212,12 @@ svg2.selectAll("mydots")
     .attr("id", function(d){return "dots"+d} )
     .style("fill", function(d){ return color(d)})
     .on("mouseover", function(d){
-    		d3.select("#dots"+d).style("r", 8)
+    		d3.select("#dots"+d).attr("r", 8)
 
     		})
+
     .on("mouseleave", function(d){
-    		d3.select("#dots"+d).style("r", 5)
+    		d3.select("#dots"+d).attr("r", 5)
 
     		})
     .on("click", function(d){  
