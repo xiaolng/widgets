@@ -1,4 +1,4 @@
-,db,tgaps_wfd,tgaps_all,nfields_wfd,nfields_all,nstars_wfd,nstars_all,family
+id,db,tgaps_wfd,tgaps_all,nfields_wfd,nfields_all,nstars_wfd,nstars_all,family
 0,agnddf_v1.5_10yrs,32,24,49,24,45,15,agnddf
 1,alt_dust_v1.5_10yrs,6,8,6,20,5,56,alt
 2,alt_roll_mod2_dust_sdf_0.20_v1.5_10yrs,8,11,8,46,8,58,alt
