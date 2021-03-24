@@ -2,14 +2,17 @@
 <body>
 	<h2>Comparing LSST OpSims</h2>
 	<p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. </p>
-
+	<button onclick = "update(csvfile)">Proposal Id=1 WFD</button>
+	<button onclick="update(csvfile2)">Galactic Plane</button>
+	<button onclick="update(csvfile3)">LMC</button>
+	<button onclick="update(csvfile4)">SMC</button>
+	<p></p>
 	<table>
 	<tr>
 	  <th> <div id="rank"></div> </th>
 	  <th> <div id="legend"></div> </th>
     </tr>
     </table>
-
 </body>
 
 </html>
@@ -21,6 +24,27 @@
 var margin = {top:50, right:50, bottom:50, left:50}
 var width = 800 - margin.left - margin.right
 var height = 500 - margin.top  - margin.bottom
+
+
+//var csvfile = "./data/iris.csv"
+var csvfile = "./data/df_rank.csv"
+var csvfile2 = "./data/df_rank_t.csv"
+var csvfile3 = "./data/df_rank.csv"
+var csvfile4 = "./data/df_rank_t.csv"
+
+// color 
+families = ['agnddf', 'alt', 'baseline', 'bulges', 'daily', 'dcr', 'descddf',
+       					'filterdist', 'footprint', 'goodseeing', 'greedy', 'roll',
+       					'rolling', 'short', 'spiders', 'third', 'twilight', 'u60', 'var',
+       					'wfd']
+var color = d3.scaleOrdinal()
+			  .domain( families )
+			  .range([ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928', '#004301', '#5e0022', '#ed00d7', '#00008f', '#626d60', '#9978ff', '#5b3600', '#00a799'])
+
+
+// Here I set the list of dimension manually to control the order of axis:
+//dimensions = ["Petal_Length", "Petal_Width", "Sepal_Length", "Sepal_Width"]
+dimensions = ["tgaps_wfd", "tgaps_all", "nfields_wfd", "nfields_all", "nstars_wfd", "nstars_all"]
 
 // append svg to body
 var svg = d3.select("#rank")
@@ -37,22 +61,6 @@ var svg = d3.select("#rank")
 //			.domain([0, 100])
 //var cmap = d3.scaleSequential(d3.interpolateSpectral).domain([100, 0])
 
-// color 
-
-families = ['agnddf', 'alt', 'baseline', 'bulges', 'daily', 'dcr', 'descddf',
-       					'filterdist', 'footprint', 'goodseeing', 'greedy', 'roll',
-       					'rolling', 'short', 'spiders', 'third', 'twilight', 'u60', 'var',
-       					'wfd']
-var color = d3.scaleOrdinal()
-			  .domain( families )
-			  .range([ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928', '#004301', '#5e0022', '#ed00d7', '#00008f', '#626d60', '#9978ff', '#5b3600', '#00a799'])
-
-//var csvfile = "./data/iris.csv"
-var csvfile = "./data/df_rank.csv"
-
-// Here I set the list of dimension manually to control the order of axis:
-//dimensions = ["Petal_Length", "Petal_Width", "Sepal_Length", "Sepal_Width"]
-dimensions = ["tgaps_wfd", "tgaps_all", "nfields_wfd", "nfields_all", "nstars_wfd", "nstars_all"]
 
 // x scale
 var x = d3.scalePoint()
@@ -85,30 +93,37 @@ for (i in dimensions){
       .text(function(d) { return d; })
       .style("fill", "black")
 
-var data = d3.csv(csvfile).then( 
-	function(data){
-
-	// Draw lines
-	svg.selectAll("myPath")
-	   .data(data)
-	   .enter()
-	   .append("path")
-	   	.attr("class", function (d) { return "line " + d.family } ) 
-	   	//.attr("id", function (d) { return "line" + d.id } )
-      	.attr("d",  path)
-      	.style("fill", "none" )
-      	.style("stroke", function(d){ return( color(d.family))} )
-		//.style( "stroke-dasharray", "10,10")
-      	.style("opacity", 0.1)
-      	.style("stroke-width", 1)
-      	.on("mouseover", linemouseover)
-      	.on("mouseleave", linemouseleave)
-      	.on("click", highlight)
-      	.on("dblclick", doNotHighlight )
-
-	}
-	)
-
+function update(csvfile){
+	// update when button is clicked
+	// remove before plot new lines
+	d3.selectAll(".opsimlines").remove()
+	
+	var data = d3.csv(csvfile).then( 
+		function(data){
+	
+		// Draw lines
+		svg.selectAll("myPath")
+		   .data(data)
+		   .enter()
+		   .append("g")
+		   .attr("class", "opsimlines")
+		   .append("path")
+		   	.attr("class", function (d) { return "line " + d.family } ) 
+		   	//.attr("id", function (d) { return "line" + d.id } )
+	      	.attr("d",  path)
+	      	.style("fill", "none" )
+	      	.style("stroke", function(d){ return( color(d.family))} )
+			//.style( "stroke-dasharray", "10,10")
+	      	.style("opacity", 0.1)
+	      	.style("stroke-width", 1)
+	      	.on("mouseover", linemouseover)
+	      	.on("mouseleave", linemouseleave)
+	      	.on("click", highlight)
+	      	.on("dblclick", doNotHighlight )
+	
+		}
+		)
+}
 // function path
 
 // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
@@ -275,4 +290,5 @@ svg2.selectAll("mylabels")
 
     	} )
 
+update(csvfile)
 </script>
