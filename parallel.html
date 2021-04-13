@@ -27,7 +27,9 @@ var height = 500 - margin.top  - margin.bottom
 
 
 //var csvfile = "./data/iris.csv"
-var csvfile = "./data/df_rank.csv"
+//var csvfile = "./data/df_rank.csv"
+var csvfile = "./data/df_radar_wfd.csv"
+
 var csvfile2 = "./data/df_rank_t.csv"
 var csvfile3 = "./data/df_rank.csv"
 var csvfile4 = "./data/df_rank_t.csv"
@@ -44,7 +46,9 @@ var color = d3.scaleOrdinal()
 
 // Here I set the list of dimension manually to control the order of axis:
 //dimensions = ["Petal_Length", "Petal_Width", "Sepal_Length", "Sepal_Width"]
-dimensions = ["tgaps_wfd", "tgaps_all", "nfields_wfd", "nfields_all", "nstars_wfd", "nstars_all"]
+//dimensions = ["tgaps_wfd", "tgaps_all", "nfields_wfd", "nfields_all", "nstars_wfd", "nstars_all"]
+
+dimensions = ["FoM_tgaps_same","FoM_tgaps_diff", "FoM_EG", "FoM_Gal", "FoM_depth"]
 
 // append svg to body
 var svg = d3.select("#rank")
@@ -71,7 +75,8 @@ var y = {}
 for (i in dimensions){
 	name = dimensions[i]
 	y[name] = d3.scaleLinear()
-				.domain([0, 86])  // same range for each group
+				//.domain([0, 86])  // same range for each group
+        .domain([0, 1])
 				.range([height, 0])
 }
 
