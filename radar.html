@@ -9,11 +9,21 @@
 <h2>Radar chart for LSST OpSims</h2>
 <p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. Mouseleave legend text to clear selections.</p>
 
-  <button onclick = "update(csvfile)">Proposal Id=1 WFD</button>
-  <button onclick="update(csvfile2)">Galactic Plane</button>
-  <button onclick="update(csvfile3)">LMC</button>
-  <button onclick="update(csvfile4)">SMC</button>
-  <p></p>
+<table>
+<tr><td>
+  <button onclick = "update(csv_wfd)">Proposal Id=1 WFD</button>
+  <button onclick="update(csv_GP_wfd)">Galactic Plane</button>
+  <button onclick="update(csv_LMC_wfd)">LMC</button>
+  <button onclick="update(csv_SMC_wfd)">SMC</button>
+</tr></td>
+<tr><td>
+  <button onclick = "update(csv_all)">ALL(exclude DDFs)</button>
+  <button onclick="update(csv_GP_all)">Galactic Plane</button>
+  <button onclick="update(csv_LMC_all)">LMC</button>
+  <button onclick="update(csv_SMC_all)">SMC</button>
+</tr></td>
+</table>
+  <p id="selected"></p>
 
   <table>
     <tr>
@@ -59,10 +69,15 @@ var  radius = d3.scaleLinear()
       .range([0, (circleConstraint / 2)])
 
 // var csvfile = "./data/df_rank_t.csv"
-var csvfile = "./data/df_radar_wfd_t.csv"
-var csvfile2 = "./data/df_rank_t.csv"
-var csvfile3 = "./data/df_rank.csv"
-var csvfile4 = "./data/df_radar_wfd_t.csv"
+var csv_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_wfd_t.csv"
+var csv_GP_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_inwfd_t.csv"
+var csv_LMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_inwfd_t.csv"
+var csv_SMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_inwfd_t.csv"
+
+var csv_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_all_t.csv"
+var csv_GP_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_all_t.csv"
+var csv_LMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_all_t.csv"
+var csv_SMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_all_t.csv"
 
 var maxValue = 1
 var topValue = 1.0 * maxValue;
@@ -90,11 +105,13 @@ var circleAxes = svg.selectAll(".circle-ticks")
 
 function update(csvfile){
 
-d3.csv(csvfile).then( function(data) {
-    d3.selectAll(".series").remove()
-    d3.selectAll(".line-ticks").remove()
-    d3.selectAll(".mydots").remove()
-    d3.selectAll(".mylabels").remove()
+  d3.selectAll("#selected").text(csvfile)
+  d3.selectAll(".series").remove()
+  d3.selectAll(".line-ticks").remove()
+  d3.selectAll(".mydots").remove()
+  d3.selectAll(".mylabels").remove()
+
+  d3.csv(csvfile).then( function(data) {
 
     lineAxes = svg.selectAll('.line-ticks')
         .data(data)
@@ -307,7 +324,7 @@ var tooltip = d3.select("body").append("div")
     .style("background", "white" )
     .style("opacity", 0.6)
 
-update(csvfile)
+update(csv_wfd)
 </script>
 </body>
 </html>

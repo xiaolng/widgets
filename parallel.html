@@ -2,11 +2,22 @@
 <body>
 	<h2>Comparing LSST OpSims</h2>
 	<p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. Mouseleave legend text to clear selections.</p>
-	<button onclick = "update(csvfile)">Proposal Id=1 WFD</button>
-	<button onclick="update(csvfile2)">Galactic Plane</button>
-	<button onclick="update(csvfile3)">LMC</button>
-	<button onclick="update(csvfile4)">SMC</button>
-	<p></p>
+
+<table>
+<tr><td>
+	<button onclick = "update(csv_wfd)">Proposal Id=1 WFD</button>
+	<button onclick="update(csv_GP_wfd)">Galactic Plane</button>
+	<button onclick="update(csv_LMC_wfd)">LMC</button>
+	<button onclick="update(csv_SMC_wfd)">SMC</button>
+</tr></td>
+<tr><td>
+  <button onclick = "update(csv_all)">ALL(exclude DDFs)</button>
+  <button onclick="update(csv_GP_all)">Galactic Plane</button>
+  <button onclick="update(csv_LMC_all)">LMC</button>
+  <button onclick="update(csv_SMC_all)">SMC</button>
+</tr></td>
+</table>
+	<p id='selected'></p>
 	<table>
 	<tr>
 	  <th> <div id="rank"></div> </th>
@@ -25,14 +36,20 @@ var margin = {top:50, right:50, bottom:50, left:50}
 var width = 800 - margin.left - margin.right
 var height = 500 - margin.top  - margin.bottom
 
-
 //var csvfile = "./data/iris.csv"
 //var csvfile = "./data/df_rank.csv"
-var csvfile = "./data/df_radar_wfd.csv"
+//var csvfile = "./data/df_radar_wfd.csv"
+var csv_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_wfd.csv"
+var csv_GP_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_inwfd.csv"
+var csv_LMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_inwfd.csv"
+var csv_SMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_inwfd.csv"
 
-var csvfile2 = "./data/df_rank_t.csv"
-var csvfile3 = "./data/df_rank.csv"
-var csvfile4 = "./data/df_rank_t.csv"
+var csv_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_all.csv"
+var csv_GP_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_all.csv"
+var csv_LMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_all.csv"
+var csv_SMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_all.csv"
+
+
 
 // color 
 families = ['agnddf', 'alt', 'baseline', 'bulges', 'daily', 'dcr', 'descddf',
@@ -102,7 +119,8 @@ function update(csvfile){
 	// update when button is clicked
 	// remove before plot new lines
 	d3.selectAll(".opsimlines").remove()
-	
+	d3.selectAll("#selected").text(csvfile)
+
 	var data = d3.csv(csvfile).then( 
 		function(data){
 	
@@ -294,5 +312,5 @@ svg2.selectAll("mylabels")
     	} )
 
 // run update when page first loaded
-update(csvfile)
+update(csv_wfd)
 </script>
