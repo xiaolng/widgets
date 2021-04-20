@@ -3,11 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script type="text/javascript", src="./js/d3/d3.js"></script>
-<style>
-.plotbutton{
-  background-color: #4CAF50
-}
-</style>
+
 </head>
 <body>
 <h2>Radar chart for LSST OpSims</h2>
@@ -27,12 +23,8 @@
   <button onclick="update(csv_SMC_all)">SMC</button>
 </tr></td>
 </table>
+  <p id="selected"></p>
 
-<p>Enter link to a csv file (make sure same format as <a href= "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_wfd_t.csv"> this example</a>) then click Plot:</p>
-
-  <textarea id="csvlink" cols="60" ></textarea>
-  <button  class="plotbutton" onclick="update2()" > Plot </button>
-<p></p>
   <table>
     <tr>
     <th> <div id="rank"></div> </th>
@@ -111,19 +103,9 @@ var circleAxes = svg.selectAll(".circle-ticks")
       .attr("dy", function(d) {return radius(d)})
       .text(String);
 
-
-function update2(){
-
-  var inputcsv = document.getElementById("csvlink").value
-  update(inputcsv)
-
-}
-
 function update(csvfile){
 
-  //d3.selectAll("#csvlink").text(csvfile)
-
-  document.getElementById('csvlink').value = csvfile;
+  d3.selectAll("#selected").text(csvfile)
   d3.selectAll(".series").remove()
   d3.selectAll(".line-ticks").remove()
   d3.selectAll(".mydots").remove()
@@ -242,7 +224,7 @@ function update(csvfile){
         .attr("cy", function(d,i){ if (i<=series.length/2){return i*12} else {return (i-series.length/2)*12} }) 
         .attr("r", 5)
         .attr("id", function(d){return "dots"+d} )
-        .style("fill", function(d){ return color(d)} )
+        .style("fill", function(d){ return color(d)})
         .on("mouseover", function(d){
             d3.select("#dots"+d).attr("r", 8) })
         .on("mouseleave", function(d){
