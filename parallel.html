@@ -1,4 +1,10 @@
 <html>
+<style>
+.plotbutton{
+  background-color: #4CAF50
+}
+</style>
+
 <body>
 	<h2>Comparing LSST OpSims</h2>
 	<p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. Mouseleave legend text to clear selections.</p>
@@ -17,15 +23,23 @@
   <button onclick="update(csv_SMC_all)">SMC</button>
 </tr></td>
 </table>
-	<p id='selected'></p>
-	<table>
-	<tr>
-	  <th> <div id="rank"></div> </th>
-	  <th> <div id="legend"></div> </th>
-    </tr>
-    </table>
-</body>
 
+
+<p>Enter link to a csv file (make sure same format as <a href= "https://github.com/fedhere/LSSTunknowns/blob/master/tdAnom/data_v1_5/df_radar_wfd.csv"> this example</a>) then click Plot:</p>
+
+<p></p>
+  <textarea id="csvlink" cols="100" ></textarea>
+  <button  class="plotbutton" onclick="update2()" > Plot </button>
+  <button  class="plotbutton", onclick = "update_cum()">culmulative</button>
+
+  <table>
+    <tr>
+    <th> <div id="rank"></div> </th>
+    <th> <div id="legend"></div> </th>
+    </tr>
+  </table>
+
+</body>
 </html>
 
 <!-- load d3.js-->
@@ -49,6 +63,7 @@ var csv_GP_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/
 var csv_LMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_allsky.csv"
 var csv_SMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_allsky.csv"
 
+//var csv_all_cum = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_allsky.csv"
 
 // color 
 families = ['agnddf', 'alt', 'baseline', 'bulges', 'daily', 'dcr', 'descddf',
@@ -89,6 +104,7 @@ var x = d3.scalePoint()
 	  .range([0, width])
 	  .domain(dimensions)
 
+var ymax = 1
 var y = {}
 for (i in dimensions){
 	name = dimensions[i]
@@ -97,7 +113,6 @@ for (i in dimensions){
         .domain([0, 1])
 				.range([height, 0])
 }
-
 
 // Draw the axis:
  svg.selectAll("myAxis")
@@ -119,8 +134,38 @@ for (i in dimensions){
 function update(csvfile){
 	// update when button is clicked
 	// remove before plot new lines
+  d3.selectAll(".axis").remove()
 	d3.selectAll(".opsimlines").remove()
-	d3.selectAll("#selected").text(csvfile)
+	//d3.selectAll("#csvlink").text(csvfile)
+  document.getElementById('csvlink').value = csvfile;
+
+  var ymax = 1
+  //var y = {}
+  for (i in dimensions){
+    name = dimensions[i]
+    y[name] = d3.scaleLinear()
+          //.domain([0, 86])  // same range for each group
+          .domain([0, ymax])
+          .range([height, 0])
+  }
+  
+  // Draw the axis:
+   svg.selectAll("myAxis")
+      // For each dimension of the dataset I add a 'g' element:
+      .data(dimensions).enter()
+      .append("g")
+      .attr("class", "axis")
+      // I translate this element to its right position on the x axis
+      .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+      // And I build the axis with the call function
+      .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
+      // Add axis title
+      .append("text")
+        .style("text-anchor", "middle")
+        .attr("y", -9)
+        .text(function(d) { return d; })
+        .style("fill", "black")
+
 
 	var data = d3.csv(csvfile).then( 
 		function(data){
@@ -152,10 +197,101 @@ function update(csvfile){
 
 // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
 function path(d) {
-      return d3.line()(dimensions.map( function(p) { return [x(p), y[p](d[p])]; }));
+      //return d3.line()( dimensions.map( function(p) { return [x(p), y[p] (d[p])]; })); // y[p] 
+      return d3.line()( dimensions.map( p => [x(p), y[p] (d[p] ) ]) ) ; // y[p] y-axis for current dimension
+
 }
 
+// The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+function path_cum(d,y) {
+      //return d3.line()( dimensions.map( function(p) { return [x(p), y[p] (d[p])]; })); // y[p] 
+      return d3.line()( cum(d,y)
+      ) ; // y[p] y-axis for current dimension
 
+}
+
+// calculate the culumative positions
+function cum(d, y){
+  var arr = []
+  for (i in dimensions){
+    
+    p = dimensions[i]
+    y_cum = 0
+    for (j=0; j<=i; j++){
+      //console.log( d[ dimensions[j] ] )
+      y_cum += d[ dimensions[j] ]*1
+
+    }
+
+    arr.push( [x(p), y[p] ( y_cum) ] )
+
+  }
+
+return arr
+}
+
+function update_c(csvfile){
+  // update when button is clicked
+  // remove before plot new lines
+
+  d3.selectAll(".axis").remove()
+  d3.selectAll(".opsimlines").remove()
+  d3.selectAll("#csvlink").text(csvfile)
+
+  var ymax = 5
+  var y = {}
+  for (i in dimensions){
+    name = dimensions[i]
+    y[name] = d3.scaleLinear()
+          //.domain([0, 86])  // same range for each group
+          .domain([0, ymax])
+          .range([height, 0])
+  }
+  
+  // Draw the axis:
+   svg.selectAll("myAxis")
+      // For each dimension of the dataset I add a 'g' element:
+      .data(dimensions).enter()
+      .append("g")
+      .attr("class", "axis")
+      // I translate this element to its right position on the x axis
+      .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+      // And I build the axis with the call function
+      .each(function(d) { d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d])); })
+      // Add axis title
+      .append("text")
+        .style("text-anchor", "middle")
+        .attr("y", -9)
+        .text(function(d) { return d; })
+        .style("fill", "black")
+
+
+  var data = d3.csv(csvfile).then( 
+    function(data){
+  
+    // Draw lines
+    svg.selectAll("myPath")
+       .data(data)
+       .enter()
+       .append("g")
+       .attr("class", "opsimlines")
+       .append("path")
+        .attr("class", function (d) { return "line " + d.family } ) 
+        //.attr("id", function (d) { return "line" + d.id } )
+          .attr("d",  d=>path_cum(d, y))
+          .style("fill", "none" )
+          .style("stroke", function(d){ return( color(d.family))} )
+      //.style( "stroke-dasharray", "10,10")
+          .style("opacity", 0.1)
+          .style("stroke-width", 1)
+          .on("mouseover", linemouseover)
+          .on("mouseleave", linemouseleave)
+          .on("click", highlight)
+          .on("dblclick", doNotHighlight )
+  
+    }
+    )
+}
 // mouse event function
 // Highlight the specie that is hovered
 var highlight = function(d){
@@ -314,4 +450,21 @@ svg2.selectAll("mylabels")
 
 // run update when page first loaded
 update(csv_wfd)
+
+function update_cum(){
+
+  //var csv_cum = d3.select("#csvlink").text()
+  var csv_cum = document.getElementById("csvlink").value
+  console.log(csv_cum)
+  update_c(csv_cum)
+
+}
+
+function update2(){
+
+  var csv_cum = document.getElementById("csvlink").value
+  console.log(csv_cum)
+  update(csv_cum)
+
+}
 </script>
