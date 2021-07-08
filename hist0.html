@@ -54,15 +54,14 @@ var svg2 = d3.select("#rank").append("svg")
 
 families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#b2df8a','#b2df8a','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#46982C','#46982C','#46982C','#46982C','#46982C','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#933379','#933379','#933379','#933379','#933379','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#9978ff','#9978ff','#9978ff','#9978ff']
 
-//csvfile = './data/data_doubleHist.csv'
-csvfile = 'https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/pmAnom/TPM.csv'
+csvfile = './data/data_doubleHist.csv'
 
 d3.csv(csvfile).then( function(data){
 
 
   // X axis: scale and draw:
   var x = d3.scaleLinear()
-      .domain([0, 0.5])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .domain([-4,9])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
       .range([0, w]);
   svg.append("g")
       .attr("transform", "translate(0," + h + ")")
@@ -70,24 +69,21 @@ d3.csv(csvfile).then( function(data){
   // Y axis: scale and draw:
   var y = d3.scaleLinear()
           .range([h, 0]);
-          y.domain([0, 150]);   // d3.hist has to be called before the Y axis obviously
+          y.domain([0, 200]);   // d3.hist has to be called before the Y axis obviously
       svg.append("g")
           .call(d3.axisLeft(y));
 
   // set the parameters for the histogram
   var histogram = d3.histogram()
-      .value(function(d) { return +d.values; })   // I need to give the vector of value
+      .value(function(d) { return +d.value; })   // I need to give the vector of value
       .domain(x.domain())  // then the domain of the graphic
-      .thresholds(x.ticks(50)); // then the numbers of bins
+      .thresholds(x.ticks(30)); // then the numbers of bins
 
-  //var variables = ["variable 1", "variable 2"]
-  var variables = [ 'dcr_nham1_ugri_v1.5_10yrs', 'rolling_mod6_sdf_0.20_v1.5_10yrs', 
-                    'wfd_depth_scale0.95_noddf_v1.5_10yrs']
-
+  var variables = ["variable 1", "variable 2"]
 
   for (i=0;i<variables.length;i++){
       // And apply twice this function to data to get the bins.
-      var bins1 = histogram(data.filter( function(d){return d.variable === variables[i]} ));
+      var bins1 = histogram(data.filter( function(d){return d.type === variables[i]} ));
 
       // append the bars for series 1
       svg.selectAll("rect"+i)
