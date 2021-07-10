@@ -187,7 +187,7 @@ function update(){
             var bins1 = histogram(data.filter( function(d){return d.variable === variables[v]} ));
             
 
-            y.domain([0, d3.max(bins1, function(d) { return d.length+50; })]);   // d3.hist has to be called before the Y axis obviously
+            y.domain([0, d3.max(bins1, function(d) { return d.length+20; })]);   // d3.hist has to be called before the Y axis obviously
             // update axis and path
             d3.select("#axisy").remove()
             d3.selectAll("."+variables[v]).remove()
@@ -209,7 +209,7 @@ function update(){
                   .attr('class', variables[v])
                   .attr("x", 1)
                   .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
-                  .attr("width", function(d) { return x(d.x1) - x(d.x0)-1; })
+                  .attr("width", function(d) { return x(d.x1) - x(d.x0); })
                   .attr("height", function(d, i) {
                                          //length_cum += d.length
                                     return h - y(d.length); 
@@ -227,7 +227,7 @@ function update(){
             var line = d3.line().x(function(d){return x(d.x0)}) 
                                 .y(function(d, i){
                                             h_cum += d.length
-                                            console.log([v, h_cum])
+                                            //console.log([v, h_cum])
                                             return y2(h_cum)})
             
             svg.append("path")
