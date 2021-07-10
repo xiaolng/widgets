@@ -151,7 +151,7 @@ d3.csv(csvfile).then( function(data){
   // Y axis: scale and draw:
   var y = d3.scaleLinear()
             .range([h, 0]);
-            y.domain([0, 150]);   // d3.hist has to be called before the Y axis obviously
+            y.domain([0, 180]);   // d3.hist has to be called before the Y axis obviously
   svg.append("g")
           .call(d3.axisLeft(y));
 
