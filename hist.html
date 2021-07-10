@@ -150,8 +150,8 @@ csvfile = './data/TPM.csv'
 function update(){ 
 
       var nbins = document.querySelector("#nbins_slider").value
-      d3.select("#selected_nbins").text('number of bins '+ nbins)
       console.log(nbins)
+      d3.select("#selected_nbins").text('number of bins '+ nbins)
 
       
       d3.csv(csvfile).then( function(data){
