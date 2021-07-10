@@ -14,6 +14,14 @@
 <h2>Histogram chart for LSST OpSims</h2>
 <p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. Mouseleave legend text to clear selections.</p>
 
+<div class="slider item">
+      <div id="selected_nbins">number of bins </div>
+      <div><span class="low">10</span> 
+           <input type="range" id='nbins_slider' name="scale" min="10" max="200" step='1' value="50"> 
+           <span>200</span></div>
+</div>
+<button class="button" onclick = "update()">Update</button>
+
   <table>
     <tr>
     <th> <div id="hist"></div> </th>
@@ -23,10 +31,10 @@
 
 
 <script type="text/javascript">
-var width = 800
+var width = 900
 var height = 800
 
-var margin = {top: 70, right: 20, bottom: 40, left: 40},
+var margin = {top: 70, right: 50, bottom: 40, left: 40},
     w = width - margin.left - margin.right,
     h = height - margin.top - margin.bottom;
 
@@ -138,113 +146,177 @@ var color = d3.scaleOrdinal(families).domain(variables)
 //csvfile = 'https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/pmAnom/TPM.csv'
 
 csvfile = './data/TPM.csv'
-d3.csv(csvfile).then( function(data){
 
+function update(){ 
 
-  // X axis: scale and draw:
-  var x = d3.scaleLinear()
-      .domain([0, 0.5])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-      .range([0, w]);
-  svg.append("g")
-      .attr("transform", "translate(0," + h + ")")
-      .call(d3.axisBottom(x));
-  // Y axis: scale and draw:
-  var y = d3.scaleLinear()
-            .range([h, 0]);
-            y.domain([0, 180]);   // d3.hist has to be called before the Y axis obviously
-  svg.append("g")
-          .call(d3.axisLeft(y));
+      var nbins = document.querySelector("#nbins_slider").value
+      d3.select("#selected_nbins").text('number of bins '+ nbins)
+      console.log(nbins)
 
-  // set the parameters for the histogram
-  var histogram = d3.histogram()
-      .value(function(d) { return +d.values; })   // I need to give the vector of value
-      .domain(x.domain())  // then the domain of the graphic
-      .thresholds(x.ticks(50)); // then the numbers of bins
+      
+      d3.csv(csvfile).then( function(data){
+      
+      
+        // X axis: scale and draw:
+        var x = d3.scaleLinear()
+            .domain([0, 0.5])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) {       return +d.price })
+            .range([0, w]);
+        svg.append("g")
+            .attr("transform", "translate(0," + h + ")")
+            .call(d3.axisBottom(x));
+        // Y axis: scale and draw:
+        var y = d3.scaleLinear()
+                  .range([h, 0])
+        
+        
+        // Y axis: right
+        var y2 = d3.scaleLinear()
+                    .range([h, 0])
+                    .domain([0, 1850])
+          svg.append("g").attr("transform", "translate("+w+", 0)")
+                .call(d3.axisRight(y2))
+      
+        // set the parameters for the histogram
+        var histogram = d3.histogram()
+            .value(function(d) { return +d.values; })   // I need to give the vector of value
+            .domain(x.domain())  // then the domain of the graphic
+            .thresholds(x.ticks(nbins)); // then the numbers of bins
 
-  for (var v=0;v<variables.length;v++){
-      // And apply twice this function to data to get the bins.
-      var bins1 = histogram(data.filter( function(d){return d.variable === variables[v]} ));
+        for (var v=0;v<variables.length;v++){
+            // And apply twice this function to data to get the bins.
+            var bins1 = histogram(data.filter( function(d){return d.variable === variables[v]} ));
+            
 
-      //console.log(bins1)
-      // append the bars for series 1
-      var length_cum = 0;
+            y.domain([0, d3.max(bins1, function(d) { return d.length+50; })]);   // d3.hist has to be called before the Y axis obviously
+            d3.select("#axisy").remove()
+            d3.selectAll("."+variables[v]).remove()
+            d3.selectAll(".cumpath"+variables[v]).remove()
 
-      svg.selectAll("rect"+v)
-          .data(bins1)
-          .enter()
-          .append("g")
-          .append("rect")
-            .attr('class', variables[v])
-            .attr("x", 1)
-            .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
-            .attr("width", function(d) { return x(d.x1) - x(d.x0)-1; })
-            .attr("height", function(d, i) {
-                                   //length_cum += d.length
-                              return h - y(d.length); 
-                          })
-            .style("fill", families[v])
-            .style("opacity", 0.01)
+            svg.append("g")
+                .attr("id", "axisy")
+                .call(d3.axisLeft(y));
+      
+            //console.log(bins1)
+            // append the bars for series 1
+            var length_cum = 0;
+      
+            svg.selectAll("rect"+v)
+                .data(bins1)
+                .enter()
+                .append("g")
+                .append("rect")
+                  .attr('class', variables[v])
+                  .attr("x", 1)
+                  .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+                  .attr("width", function(d) { return x(d.x1) - x(d.x0)-1; })
+                  .attr("height", function(d, i) {
+                                         //length_cum += d.length
+                                    return h - y(d.length); 
+                                })
+                  .style("fill", families[v])
+                  .style("opacity", 0.01)
+      
+            // add line
+            var linedata = [ {"linex":0, "liney":0 + v },
+                    {"linex":0.1, "liney":10 + v },
+                    {"linex":0.2, "liney":50 + v },]
+      
+            var h_cum = 0;
+      
+            var line = d3.line().x(function(d){return x(d.x0)}) 
+                                .y(function(d, i){
+                                            h_cum += d.length
+                                            console.log([v, h_cum])
+                                            return y2(h_cum)})
+            
+            svg.append("path")
+               .datum(bins1)
+               .attr("class", "cumpath"+variables[v])
+               .attr("d",line)
+               .style("stroke", color(variables[v])).style("stroke-width", 1)
+               .style("fill", "none")
+               .style("stroke-opacity", 0.05)
+      
+      
+            // Handmade legend
+            svg2.append("circle")
+              .attr("cx", function(d,i){if (v>variables.length/2){return 200-10} else {return 0} })
+              .attr("cy", function(d,i){ if (v<=variables.length/2){return v*12} else {return (v-variables.length/2)*12} })      
+              .attr("r", 5)
+              .attr("id", "dots"+variables[v] )
+              .style("fill", families[v] )
+              .on("mouseover", function(d){
+                          d3.select("#dots"+d).attr("r", 8) })
+              .on("mouseleave", function(d){
+                          d3.select("#dots"+d).attr("r", 5) })
+              .on("click", function(d){  
+                          d3.select(this).style("opacity", 1).style("stroke-width", 4)
+                                  .style("stroke", "black").style("stroke-opacity", 1)
+                          // Second the hovered specie takes its color
+                          tex = this.id.replace("dots","")
+                          console.log( tex )
+      
+                          d3.selectAll("." +  tex)
+                            .style("opacity", 0.3).style("stroke-width", "2")
+                            //.style("fill", "#f7f7f7f7")
+                            .style("stroke", color(tex)).style("stroke-opacity", 1)
+                          
+                          d3.selectAll('.cumpath'+tex)
+                                      .style("stroke-width", "3")
+                                      //.style("fill", "#f7f7f7f7")
+                                      .style("stroke-opacity", 1)
+      
+                          //.transition().duration(200)
+                          //.style("stroke", color(d))
+                               } )
+      
+            svg2.append("text")
+                .attr("x", function(){
+                              if (v<= variables.length/2) {return 10} else {return 220}  
+                                    })
+      
+                .attr("y", function(){
+                              if (v<= variables.length/2) {return v*12} else {return (v-variables.length/2)*12} 
+                                    })
+                .text(variables[v]).style("font-size", "12px")
+                .attr("alignment-baseline","middle")
+                .on("mouseover", function(){
+                                    var tex = d3.select(this).text()
+                                    console.log(tex)
+      
+                                    d3.selectAll('.'+tex)
+                                      .style("opacity", 0.3).style("stroke-width", "2")
+                                      //.style("fill", "#f7f7f7f7")
+                                      .style("stroke", color(tex)).style("stroke-opacity", 1)
+      
+                                    d3.selectAll('.cumpath'+tex)
+                                      .style("stroke-width", "3")
+                                      //.style("fill", "#f7f7f7f7")
+                                      .style("stroke-opacity", 1)
+      
+      
+                                    })
+                .on("mouseleave", function(){
+                                    var tex = d3.select(this).text()
+                                    console.log(tex)
+      
+                                    d3.selectAll('.'+tex)
+                                      .style("opacity", 0.01).style("stroke-opacity", 0)
+      
+                                    d3.selectAll('.cumpath'+tex)
+                                      .style("stroke-width", "1")
+                                      //.style("fill", "#f7f7f7f7")
+                                      .style("stroke-opacity", 0.05)
+      
+      
+                                    })
+      
+        }
+      
+      })
+}
 
-      // Handmade legend
-      svg2.append("circle")
-        .attr("cx", function(d,i){if (v>variables.length/2){return 200-10} else {return 0} })
-        .attr("cy", function(d,i){ if (v<=variables.length/2){return v*12} else {return (v-variables.length/2)*12} }) 
-        .attr("r", 5)
-        .attr("id", "dots"+variables[v] )
-        .style("fill", families[v] )
-        .on("mouseover", function(d){
-                    d3.select("#dots"+d).attr("r", 8) })
-        .on("mouseleave", function(d){
-                    d3.select("#dots"+d).attr("r", 5) })
-        .on("click", function(d){  
-                    d3.select(this).style("opacity", 1).style("stroke-width", 4)
-                            .style("stroke", "black").style("stroke-opacity", 1)
-                    // Second the hovered specie takes its color
-                    tex = this.id.replace("dots","")
-                    console.log( tex )
-
-                    d3.selectAll("." +  tex)
-                      .style("opacity", 0.3).style("stroke-width", "2")
-                      //.style("fill", "#f7f7f7f7")
-                      .style("stroke", color(tex)).style("stroke-opacity", 1)
-
-                    //.transition().duration(200)
-                    //.style("stroke", color(d))
-                         } )
-
-      svg2.append("text")
-          .attr("x", function(){
-                        if (v<= variables.length/2) {return 10} else {return 220}  
-                              })
-
-          .attr("y", function(){
-                        if (v<= variables.length/2) {return v*12} else {return (v-variables.length/2)*12} 
-                              })
-          .text(variables[v]).style("font-size", "12px")
-          .attr("alignment-baseline","middle")
-          .on("mouseover", function(){
-                              var tex = d3.select(this).text()
-                              console.log(tex)
-
-                              d3.selectAll('.'+tex)
-                                .style("opacity", 0.3).style("stroke-width", "2")
-                                //.style("fill", "#f7f7f7f7")
-                                .style("stroke", color(tex)).style("stroke-opacity", 1)
-
-                              })
-          .on("mouseleave", function(){
-                              var tex = d3.select(this).text()
-                              console.log(tex)
-
-                              d3.selectAll('.'+tex)
-                                .style("opacity", 0.01).style("stroke-opacity", 0)
-
-                              })
-
-  }
-
-});
-
+update()
 
 </script>
 
