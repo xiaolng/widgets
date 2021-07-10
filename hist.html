@@ -188,6 +188,7 @@ function update(){
             
 
             y.domain([0, d3.max(bins1, function(d) { return d.length+50; })]);   // d3.hist has to be called before the Y axis obviously
+            // update axis and path
             d3.select("#axisy").remove()
             d3.selectAll("."+variables[v]).remove()
             d3.selectAll(".cumpath"+variables[v]).remove()
@@ -285,7 +286,7 @@ function update(){
                                     console.log(tex)
       
                                     d3.selectAll('.'+tex)
-                                      .style("opacity", 0.3).style("stroke-width", "2")
+                                      .style("opacity", 0.5).style("stroke-width", "0")
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke", color(tex)).style("stroke-opacity", 1)
       
