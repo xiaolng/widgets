@@ -26,6 +26,12 @@
   <button onclick="update(csv_LMC_all)">LMC</button>
   <button onclick="update(csv_SMC_all)">SMC</button>
 </tr></td>
+<tr><td>
+  <button onclick = "update(csv_pm_2yrs)">Proper Motion 2yrs</button>
+  <button onclick="update(csv_pm_10yrs)">Proper Motion 2yrs</button>
+  <button onclick="update(csv_all_foms)">ALL FoMs</button>
+</tr></td>
+
 </table>
 
 <p>Enter link to a csv file (make sure same format as <a href= "https://github.com/fedhere/LSSTunknowns/blob/master/tdAnom/data_v1_5/df_radar_wfd_t.csv"> this example</a>) then click Plot:</p>
@@ -41,8 +47,8 @@
   </table>
 
 <script type="text/javascript">
-var width = 800
-var height = 800
+var width = 1000
+var height = 1000
 
 var margin = {top: 70, right: 20, bottom: 40, left: 40},
     w = width - margin.left - margin.right,
@@ -58,12 +64,14 @@ var svg = d3.select("#rank").append("svg")
     .append("g")
     .attr("transform", "translate(" + centerXPos + ", " + centerYPos + ")")
 
+var margin2 = {top: 30, right: 20, bottom: 40, left: 40}
+
 var svg2 = d3.select("#legend").append("svg")
     .attr("width", 400 + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom)
     .style("background-color", "#f7f7f7f7")
     .append("g")
-    .attr("transform", "translate(" + margin.left +", "+ margin.top +")")
+    .attr("transform", "translate(" + margin2.left +", "+ margin2.top +")")
 
 //var color = d3.scale.category10(); // use in d3.v3
 //var color = d3.scaleOrdinal(d3.schemeCategory10) // in > d3.v4
@@ -89,6 +97,10 @@ var csv_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdA
 var csv_GP_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_allsky_t.csv"
 var csv_LMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_allsky_t.csv"
 var csv_SMC_all = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_allsky_t.csv"
+
+csv_pm_2yrs = "./data/df_radar_pm_2yrs_t.csv"
+csv_pm_10yrs = "./data/df_radar_pm_10yrs_t.csv"
+csv_all_foms = "./data/df_radar_all_foms_t.csv"
 
 var maxValue = 1
 var topValue = 1.0 * maxValue;

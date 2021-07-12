@@ -29,7 +29,6 @@
     </tr>
   </table>
 
-
 <script type="text/javascript">
 var width = 900
 var height = 800
@@ -187,7 +186,7 @@ function update(){
             var bins1 = histogram(data.filter( function(d){return d.variable === variables[v]} ));
             
 
-            y.domain([0, d3.max(bins1, function(d) { return d.length+20; })]);   // d3.hist has to be called before the Y axis obviously
+            y.domain([0, d3.max(bins1, function(d) { return d.length*1.2; })]);   // d3.hist has to be called before the Y axis obviously
             // update axis and path
             d3.select("#axisy").remove()
             d3.selectAll("."+variables[v]).remove()
@@ -215,7 +214,7 @@ function update(){
                                     return h - y(d.length); 
                                 })
                   .style("fill", families[v])
-                  .style("opacity", 0.01)
+                  .style("opacity", 0.005)
       
             // add line
             var linedata = [ {"linex":0, "liney":0 + v },
@@ -236,8 +235,23 @@ function update(){
                .attr("d",line)
                .style("stroke", color(variables[v])).style("stroke-width", 1)
                .style("fill", "none")
-               .style("stroke-opacity", 0.05)
-      
+               .style("stroke-opacity", 0.03)
+               .on("mouseover", function(d){
+                  d3.select(this).style("stroke-width", 5).style("stroke-opacity", 1)
+                      //d3.select("#"+d).style("stroke-opacity", 1)
+                      tooltip.style("visibility", "visible")
+                        .text( d3.select(this).attr("class").replace("cumpath", "") )
+                        .style("top", (d3.event.pageY-10)+"px")
+                        .style("left",(d3.event.pageX+10)+"px")
+                        .style("opacity", 1) 
+                        })
+                .on("mouseleave", function(d){
+                  d3.select(this).style("stroke-width", 1).style("stroke-opacity", 0.05)
+                      //d3.select("#"+d).style("stroke-opacity", 0.1)
+                         tooltip.style("visibility", "hidden")
+
+               })
+
       
             // Handmade legend
             svg2.append("circle")
@@ -247,9 +261,13 @@ function update(){
               .attr("id", "dots"+variables[v] )
               .style("fill", families[v] )
               .on("mouseover", function(d){
-                          d3.select("#dots"+d).attr("r", 8) })
+                          d3.select("#dots"+d).attr("r", 8) 
+                        })
               .on("mouseleave", function(d){
-                          d3.select("#dots"+d).attr("r", 5) })
+                          d3.select("#dots"+d).attr("r", 5) 
+
+
+                        })
               .on("click", function(d){  
                           d3.select(this).style("opacity", 1).style("stroke-width", 4)
                                   .style("stroke", "black").style("stroke-opacity", 1)
@@ -258,7 +276,7 @@ function update(){
                           console.log( tex )
       
                           d3.selectAll("." +  tex)
-                            .style("opacity", 0.3).style("stroke-width", "2")
+                            .style("opacity", 0.5).style("stroke-width", "2")
                             //.style("fill", "#f7f7f7f7")
                             .style("stroke", color(tex)).style("stroke-opacity", 1)
                           
@@ -308,6 +326,8 @@ function update(){
                                       .style("stroke-width", "1")
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke-opacity", 0.05)
+
+                                    d3.select("#dots"+tex).attr("r", 5).style("stroke-opacity", 0)
       
       
                                     })
@@ -316,6 +336,14 @@ function update(){
       
       })
 }
+
+//add a tooltip
+var tooltip = d3.select("body").append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background", "white" )
+    .style("opacity", 0.6)
 
 update()
 
