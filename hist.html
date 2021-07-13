@@ -33,7 +33,7 @@
 var width = 900
 var height = 800
 
-var margin = {top: 70, right: 50, bottom: 40, left: 40},
+var margin = {top: 70, right: 70, bottom: 70, left: 70},
     w = width - margin.left - margin.right,
     h = height - margin.top - margin.bottom;
 
@@ -46,6 +46,25 @@ var svg = d3.select("#hist").append("svg")
     .style("background-color", "#f7f7f7f7")
     .append("g")
     .attr("transform", "translate(" + margin.left +", "+ margin.top +")")
+
+// add axis label
+svg.append("text").attr("text-anchor", "end")
+   .attr("x", width/2)
+   .attr("y",  height-margin.bottom-20)
+   .text("recovery rate")
+
+svg.append("text").attr("text-anchor", "end")
+   .attr("transform", "rotate(-90)")
+   .attr("y", -margin.left + 20)
+   .attr("x", margin.top - height/2 + 20)
+   .text("N")
+
+svg.append("text").attr("text-anchor", "end")
+   .attr("transform", "rotate(-90)")
+   .attr("y", -margin.left + width - 20)  // actual x because of rotation
+   .attr("x", margin.top - height/2 + 50)
+   .text("N cumulative")
+
 
 var svg2 = d3.select("#rank").append("svg")
     .attr("width", 400 + margin.left + margin.right)
@@ -235,7 +254,7 @@ function update(){
                .attr("d",line)
                .style("stroke", color(variables[v])).style("stroke-width", 1)
                .style("fill", "none")
-               .style("stroke-opacity", 0.03)
+               .style("stroke-opacity", 0.2)
                .on("mouseover", function(d){
                   d3.select(this).style("stroke-width", 5).style("stroke-opacity", 1)
                       //d3.select("#"+d).style("stroke-opacity", 1)
@@ -246,7 +265,7 @@ function update(){
                         .style("opacity", 1) 
                         })
                 .on("mouseleave", function(d){
-                  d3.select(this).style("stroke-width", 1).style("stroke-opacity", 0.05)
+                  d3.select(this).style("stroke-width", 1).style("stroke-opacity", 0.2)
                       //d3.select("#"+d).style("stroke-opacity", 0.1)
                          tooltip.style("visibility", "hidden")
 
@@ -325,7 +344,7 @@ function update(){
                                     d3.selectAll('.cumpath'+tex)
                                       .style("stroke-width", "1")
                                       //.style("fill", "#f7f7f7f7")
-                                      .style("stroke-opacity", 0.05)
+                                      .style("stroke-opacity", 0.2)
 
                                     d3.select("#dots"+tex).attr("r", 5).style("stroke-opacity", 0)
       
