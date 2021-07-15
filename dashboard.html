@@ -26,13 +26,16 @@
 <button class="button" onclick = "update()">Update</button>
 
   <table>
-    <tr>
-    <th> <div id="hist"></div> </th>
-    <th> <div id="rank"></div> </th>
-    </tr>
-    <tr>
-    <th> <div id="skymap"></div></th>
-    </tr>>
+<thead>
+  <tr>
+    <th id="hist"></th>
+    <th id="legend"></th>
+    <th id="barh" rowspan="2"></th>
+  </tr>
+  <tr>
+    <td id="skymap"></td>
+    <td id="radar"></td>
+  </tr>
   </table>
 
 <script type="text/javascript">
@@ -42,9 +45,6 @@ var height = 800
 var margin = {top: 70, right: 70, bottom: 70, left: 70},
     w = width - margin.left - margin.right,
     h = height - margin.top - margin.bottom;
-
-var  centerXPos = w / 2 + margin.left;
-var  centerYPos = h / 2 + margin.top;
 
 var svg = d3.select("#hist").append("svg")
     .attr("width", w + margin.left + margin.right)
@@ -71,9 +71,9 @@ svg.append("text").attr("text-anchor", "end")
    .attr("x", margin.top - height/2 + 50)
    .text("N cumulative")
 
-
-var svg2 = d3.select("#rank").append("svg")
-    .attr("width", 400 + margin.left + margin.right)
+var w2 = 500
+var svg2 = d3.select("#legend").append("svg")
+    .attr("width", w2 + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom)
     .style("background-color", "#f7f7f7f7")
     .append("g")
@@ -270,6 +270,9 @@ function update(){
                         .style("top", (d3.event.pageY-10)+"px")
                         .style("left",(d3.event.pageX+10)+"px")
                         .style("opacity", 1) 
+
+                        dbtex = d3.select(this).attr("class").replace("cumpath", "")
+                        plotskymap(pm_csv, dbtex)
                         })
                 .on("mouseleave", function(d){
                   d3.select(this).style("stroke-width", 1).style("stroke-opacity", 0.2)
@@ -340,9 +343,8 @@ function update(){
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke-opacity", 1)
 
-
                                       // update skymap
-                                      plotskymap(nside16)
+                                      plotskymap(pm_csv, tex)
 
                                     })
                 .on("mouseleave", function(){
@@ -377,56 +379,64 @@ var tooltip = d3.select("body").append("div")
 
 update()
 
-
 // --------------------------------------------------------------------------
 // plot skymap
 //append svg
+var height3 = 500
 var svg3 = d3.select("#skymap")
       .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", w + margin.left + margin.right)
+      .attr("height", height3 + margin.top + margin.bottom)
       //.style("background-color", "rgba(128, 255, 128, 0.1)")
-      .style("background-color", "white")
+      .style("background-color", "#f7f7f7f7")
       .append("g")
       .attr("transform", "translate("+margin.left+", "+margin.top+")")
 
 // add axis
 var x3 = d3.scaleLinear()
       .domain([0, 360])
-      .range([0, width]);
+      .range([0, w]);
 
 svg3.append("g")
-  .attr("transform", "translate(0, "+height+")")
+  .attr("transform", "translate(0, "+height3+")")
   .call(d3.axisBottom(x3));
 
 var y3 = d3.scaleLinear()
       .domain([-90, 90])
-      .range([height, 0]);
+      .range([height3, 0]);
 
 svg3.append("g")
   .attr("transform", "translate(0, 0)")
   .call(d3.axisLeft(y3));
 
-var cmap = d3.scaleSequential(d3.interpolateSpectral).domain([1000000, 0])
+svg3.append("text").attr("text-anchor", "end")
+    .attr("id", "skymap_title")
+    .attr('x', w/2+30)
+    .attr('y', 20)
+    .text("db")
+
+//var cmap = d3.scaleSequential(d3.interpolateSpectral).domain([1000000, 0])
+var cmap = d3.scaleSequential(d3.interpolateViridis).domain([0, 0.5])
 
 // projection
 var proj = d3.geoMollweide().scale(160)
 
-var nside16 = "./data/Fields_nside16.csv"
+//var nside16 = "./data/Fields_nside16.csv"
+var pm_csv = "./data/pm_skymap.csv"
 
-plotskymap(nside16)
+plotskymap(pm_csv, variables[0])
 coord = 'eq'
-function plotskymap(fields){
+function plotskymap(csv_skymap, db){
           // read csv file
-         d3.csv(fields).then( function(data){
+         d3.select("#skymap_title").text(db)
+         d3.csv(csv_skymap).then( function(data){
           
           console.log(data[0])
-          console.log(data[0].starDensity_r25)
+          console.log(data[0].value)
           svg3.selectAll("circle").remove()
           
-
-          var data = data.filter( function(d){return d.fieldDec > 0} );
-
+          // select data by conditions
+          var data = data.filter( function(d){return d.db==db} );
 
           svg3.selectAll("circle")
             .data(data)
@@ -461,7 +471,9 @@ function plotskymap(fields){
                 return   y3( newy ); } ) 
               .attr("r", 5)
               .style("opacity", 0.5)
-              .style("fill", function(d){return cmap(d.starDensity_r25)})
+              .style("fill", function(d){return cmap(d.value)})
+              .on('mouseover', mouseover)
+              .on('mouseleave', mouseleave)
 
           })
 }
@@ -478,15 +490,69 @@ var changeMinMax = function(oldValue, oldMin, oldMax, newMin, newMax){
 
 // add label
 var xLabel = svg3.append("text")
-  .attr("x", width/2)
-  .attr("y", height + margin.top/2)
+  .attr("x", w/2)
+  .attr("y", height3 + margin.top/2)
   .text("RA");
 
 var yLabel = svg3.append("text")
   .attr("transform", "rotate(-90)")
   .attr("y", -margin.left+20)
-  .attr("x", -height/2)
+  .attr("x", -height3/2)
   .text("DEC")
+
+ // mouseover function
+ var mouseover = function(d) {
+  //console.log( proj( [-d.fieldRa, d.fieldDec] ) )
+    d3.select(this)
+        .style("stroke", "black")
+        .style("stroke-opacity", 1)
+        //.style("opacity", 1)
+        //.attr("r", 5)
+        .style("cursor", "default")
+
+    tooltip.style("visibility", "visible")
+        .text([d.value])
+        .style("top", (d3.event.pageY-10)+"px")
+        .style("left",(d3.event.pageX+10)+"px")
+        .style("opacity", 1) 
+
+  }
+
+// mouseleave 
+var mouseleave = function(d){
+  d3.select(this)
+   .style("stroke", "none")
+  //  .style("opacity", 0.5)
+    //.attr("r", 2)
+
+  tooltip.style("visibility", "hidden")
+
+}
+
+// --------------------------------------------------------------------------
+// plot radar
+
+var height4 = 500
+var svg4 = d3.select("#radar")
+      .append("svg")
+      .attr("width", w2 + margin.left + margin.right)
+      .attr("height", height4 + margin.top + margin.bottom)
+      //.style("background-color", "rgba(128, 255, 128, 0.1)")
+      .style("background-color", "#f7f7f7f7")
+      .append("g")
+      .attr("transform", "translate("+margin.left+", "+margin.top+")")
+
+// --------------------------------------------------------------------------
+// plot barh
+var height5 = height + height4 
+var svg5 = d3.select("#barh")
+      .append("svg")
+      .attr("width", w + margin.left + margin.right)
+      .attr("height", height5 + margin.top + margin.bottom)
+      //.style("background-color", "rgba(128, 255, 128, 0.1)")
+      .style("background-color", "#f7f7f7f7")
+      .append("g")
+      .attr("transform", "translate("+margin.left+", "+margin.top+")")
 
 
 </script>
