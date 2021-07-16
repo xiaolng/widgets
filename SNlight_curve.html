@@ -136,21 +136,17 @@ function update_lc(){
     var csv2 = "./data/GPtemp_" + lc2_type+"_"+lc2_band + ".csv"
 
 	d3.csv(csv1, function(d){
-						// function to format csv data
-						return { 'x': d.t,
-							     'y': d.mag,
-							     'std_up':  d.mag*1 + d.stdev*1,
-							     'std_down': d.mag*1 -d.stdev*1,
-							     'band': lc1_band}
+					// function to format csv data
+					return { 'x': d.t,'y': d.mag,
+							'std_up':  d.mag*1 + d.stdev*1, 'std_down': d.mag*1 -d.stdev*1,
+							'band': lc1_band}
 		}).then( plot )
 
 	d3.csv(csv2, function(d){
-						// function to format csv data
-						return { 'x': d.t,
-							     'y': d.mag,
-							     'std_up':  d.mag*1 + d.stdev*1,
-							     'std_down': d.mag*1 -d.stdev*1,
-							     'band': lc2_band}
+					// return the formated data
+					return { 'x': d.t, 'y': d.mag,
+							'std_up':  d.mag*1 + d.stdev*1, 'std_down': d.mag*1 -d.stdev*1,
+							'band': lc2_band}
 		}).then( plot )
 
 	//update legend color
