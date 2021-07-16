@@ -1,10 +1,4 @@
 <html>
-<style>
-.button{
-  background-color: #4CAF50
-}
-</style>
-
 <body>
 <h1>Comparing SN subtypes</h1>
 <table>
@@ -35,7 +29,6 @@
 		<option value="B" selected> band B </option>
 	</select>
 	</td>
-	<!-- <td><button class="button" onclick = "update_lc()">Update light curve</button></td> -->
 </tr>
 </table>
 
@@ -152,7 +145,6 @@ function update_lc(){
 	//update legend color
 	d3.select("#lc1_rect").attr("fill", d=>linecmap(lc1_band))
 	d3.select("#lc2_rect").attr("fill", d=>linecmap(lc2_band))
-
 }
 
 // add title
@@ -161,13 +153,11 @@ svg.append("text").attr("x", 200).attr("y", 0).text("Line plot")
 // add legend
 svg.append("rect").attr("id", "lc1_rect")
 	.attr("x", 400).attr("y", 10).attr("width",15).attr("height",3).attr("fill", "red")
-
 svg.append("text").attr("id", "lc1_text").attr("x", 420).attr("y", 15)
     .text("light curve 1").style("font-size", "12px")
 
 svg.append("rect").attr("id", "lc2_rect")
 	.attr("x", 400).attr("y", 30).attr("width",15).attr("height",3).attr("fill", "red")
-
 svg.append("text").attr("id", "lc2_text").attr("x", 420).attr("y", 35)
     .text("light curve 2").style("font-size", "12px")
 
@@ -181,7 +171,7 @@ var tooltip = d3.select("body").append("div")
  
 // highlight when mouseover 
 var mouseover = function(d) {
-	console.log([d.x, d.y])
+	console.log([d.x, d.y]) // print data at console for debug
     d3.select(this)
         .style("r", "5")
         //.style("opacity", 1)
@@ -200,7 +190,6 @@ var mouseleave = function(d){
   
   d3.select(this).style("r", "2")
   tooltip.style("visibility", "hidden")
-
 }
 
 // update when any select changes
