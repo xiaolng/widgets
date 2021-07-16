@@ -24,7 +24,7 @@
 <tr>
 	<td>Light curve 2 </td>
 	<td>
-	<select id="lc2_type" value="Ic">
+	<select id="lc2_type" >
 		<option value="Ib"> SN Ib </option>
 		<option value="Ic" selected> SN Ic </option>
 	</select>
@@ -35,7 +35,7 @@
 		<option value="B" selected> band B </option>
 	</select>
 	</td>
-	<td><button class="button" onclick = "update_lc()">Update light curve</button></td>
+	<!-- <td><button class="button" onclick = "update_lc()">Update light curve</button></td> -->
 </tr>
 </table>
 
@@ -195,7 +195,7 @@ var mouseover = function(d) {
         .style("opacity", 1) 
   }
 
-  // remove highlight when mouseleave 
+// remove highlight when mouseleave 
 var mouseleave = function(d){
   
   d3.select(this).style("r", "2")
@@ -203,5 +203,9 @@ var mouseleave = function(d){
 
 }
 
+// update when any select changes
+d3.selectAll("select").on("change", function(){ update_lc() } )
+
+// run when first load
 update_lc()
 </script>
