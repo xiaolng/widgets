@@ -1,0 +1,211 @@
+<html>
+<style>
+.button{
+  background-color: #4CAF50
+}
+</style>
+
+<body>
+<h1>Comparing SN subtypes</h1>
+<table>
+<tr>
+	<td>Light curve 1 </td>
+	<td><select id="lc1_type">
+		<option value="Ib"> SN Ib </option>
+		<option value="Ic"> SN Ic </option>
+	    </select></td>
+	<td>
+	<select id="lc1_band">
+		<option value="U"> band U </option>
+		<option value="B"> band B </option>
+	</select>
+	</td>	
+</tr>
+<tr>
+	<td>Light curve 2 </td>
+	<td>
+	<select id="lc2_type" value="Ic">
+		<option value="Ib"> SN Ib </option>
+		<option value="Ic" selected> SN Ic </option>
+	</select>
+	</td>
+	<td>
+	<select id="lc2_band">
+		<option value="U"> band U </option>
+		<option value="B" selected> band B </option>
+	</select>
+	</td>
+	<td><button class="button" onclick = "update_lc()">Update light curve</button></td>
+</tr>
+</table>
+
+<table>
+	<tr>
+	  <th> <div id="lineplot"></div> </th>
+    </tr>
+</table>
+
+</body>
+</html>
+
+<!-- load d3.js-->
+<script type="text/javascript", src="./js/d3/d3.js"></script>
+
+<script type="text/javascript">
+var margin = {top:50, right:50, bottom:50, left:50}
+var width = 600 - margin.left - margin.right
+var height = 500 - margin.top  - margin.bottom
+
+// append svg to body
+var svg = d3.select("#lineplot")
+			.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.style("background-color", "#f7f7f7f7")
+			.append("g")
+			.attr("transform", "translate(" + margin.left +", "+ margin.top +")")
+
+// add axis, set range and ticks, append to svg
+var x = d3.scaleLinear().domain([-20, 60]).range([0, width])
+var y = d3.scaleLinear().domain([-3, 2]).range([height, 0])
+var xAxis = d3.axisBottom(x).tickValues([-10, 10, 0, 20,30, 40, 50]).tickFormat(d3.format(".1f"))
+
+svg.append("g").attr("transform", "translate(0, "+height+")").call(xAxis)
+svg.append("g").attr("transform", "translate(0, 0)").call(d3.axisLeft(y))
+
+//create a colormap
+var bands = ['B', 'U',]
+var linecolors = [ "#e41a1c", "#377eb8", ]
+var linecmap = d3.scaleOrdinal(linecolors).domain(bands)
+//var cmap = d3.scaleOrdinal(d3.schemeTableau10).domain(bands)
+
+// plot line, callback function for d3.csv
+function plot(data){
+	//console.log(data[0])
+	
+	//plot confidence area
+    var area = d3.area().x(d=>x(d.x)).y0(d=>y(d.std_up)).y1(d=>y(d.std_down))
+    svg.append("path")
+    	.datum(data)
+    	.attr("class", "lc_area")
+    	.attr("fill", d=>linecmap(d[0].band))
+    	.attr("fill-opacity", 0.2)
+    	.attr("stroke", "none")
+    	.attr("d", area)
+
+	// plot scatter
+	svg.append("g")
+		.selectAll("circle")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("class", "lc_points")
+		.attr("cx", d=>x(d.x))
+		.attr("cy", d=>y(d.y))
+		.attr("r", 2)
+		.style("fill", d=>linecmap(d.band))
+		.on("mouseover", mouseover)
+		.on("mouseleave", mouseleave)
+
+	//plot line
+	var line = d3.line().x(d=>x(d.x)).y(d=>y(d.y))
+    svg.append("path")
+      .datum(data)
+      .attr("class", "lc_lines")
+      .attr("fill", "none")
+      .attr("stroke", d=>linecmap(d[0].band) )
+      .attr("stroke-width", 1.)
+      .attr("d", line)
+} 
+
+// read data and update light curve
+function update_lc(){
+	// remove previous plots
+	d3.selectAll(".lc_points").remove()
+	d3.selectAll(".lc_lines").remove()
+	d3.selectAll(".lc_area").remove()
+
+	// get value from <select> tag 
+	var lc1_type = d3.select("#lc1_type").property("value")
+	var lc1_band = d3.select("#lc1_band").property("value")
+	var lc2_type = d3.select("#lc2_type").property("value")
+	var lc2_band = d3.select("#lc2_band").property("value")
+
+    // load csv, format data, and then plot
+    var csv1 = "./data/GPtemp_" + lc1_type+"_"+lc1_band + ".csv"
+    var csv2 = "./data/GPtemp_" + lc2_type+"_"+lc2_band + ".csv"
+
+	d3.csv(csv1, function(d){
+						// function to format csv data
+						return { 'x': d.t,
+							     'y': d.mag,
+							     'std_up':  d.mag*1 + d.stdev*1,
+							     'std_down': d.mag*1 -d.stdev*1,
+							     'band': lc1_band}
+		}).then( plot )
+
+	d3.csv(csv2, function(d){
+						// function to format csv data
+						return { 'x': d.t,
+							     'y': d.mag,
+							     'std_up':  d.mag*1 + d.stdev*1,
+							     'std_down': d.mag*1 -d.stdev*1,
+							     'band': lc2_band}
+		}).then( plot )
+
+	//update legend color
+	d3.select("#lc1_rect").attr("fill", d=>linecmap(lc1_band))
+	d3.select("#lc2_rect").attr("fill", d=>linecmap(lc2_band))
+
+}
+
+// add title
+svg.append("text").attr("x", 200).attr("y", 0).text("Line plot")
+
+// add legend
+svg.append("rect").attr("id", "lc1_rect")
+	.attr("x", 400).attr("y", 10).attr("width",15).attr("height",3).attr("fill", "red")
+
+svg.append("text").attr("id", "lc1_text").attr("x", 420).attr("y", 15)
+    .text("light curve 1").style("font-size", "12px")
+
+svg.append("rect").attr("id", "lc2_rect")
+	.attr("x", 400).attr("y", 30).attr("width",15).attr("height",3).attr("fill", "red")
+
+svg.append("text").attr("id", "lc2_text").attr("x", 420).attr("y", 35)
+    .text("light curve 2").style("font-size", "12px")
+
+//add a tooltip, show some information when mouseover
+var tooltip = d3.select("body").append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+    .style("background", "white" )
+    .style("opacity", 0.6)
+ 
+// highlight when mouseover 
+var mouseover = function(d) {
+	console.log([d.x, d.y])
+    d3.select(this)
+        .style("r", "5")
+        //.style("opacity", 1)
+        //.attr("r", 5)
+        .style("cursor", "default")
+
+    tooltip.style("visibility", "visible")
+        .text([d.x, d.y, ])
+        .style("top", (d3.event.pageY-10)+"px")
+        .style("left",(d3.event.pageX+10)+"px")
+        .style("opacity", 1) 
+  }
+
+  // remove highlight when mouseleave 
+var mouseleave = function(d){
+  
+  d3.select(this).style("r", "2")
+  tooltip.style("visibility", "hidden")
+
+}
+
+update_lc()
+</script>
