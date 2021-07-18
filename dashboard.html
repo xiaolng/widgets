@@ -30,7 +30,19 @@
   <tr>
     <th id="hist"></th>
     <th id="legend"></th>
-    <th id="barh" rowspan="2"></th>
+    <th id="barh" rowspan="2">
+      <select id="barh_sortby" >
+        <option value="name" > name </option>
+        <option value="TPM" selected=""> TPM </option>
+        <option value="CI" > CI </option>
+        <option value="LS" > LS </option>
+        <option value="Sum" > Sum </option>
+      </select>
+      <select id="barh_order" >
+        <option value="ascending" selected> ascending </option>
+        <option value="descending" > descending </option>
+      </select>
+    </th>
   </tr>
   <tr>
     <td id="skymap"></td>
@@ -85,13 +97,25 @@ var svg2 = d3.select("#legend").append("svg")
 //families = [ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928', '#004301', '#5e0022', '#ed00d7', '#00008f', '#626d60', '#9978ff', '#5b3600', '#00a799']
 //families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799']
 
-families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#b2df8a','#b2df8a','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#46982C','#46982C','#46982C','#46982C','#46982C','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#933379','#933379','#933379','#933379','#933379','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#9978ff','#9978ff','#9978ff','#9978ff']
+
+families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#b2df8a','#b2df8a','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#46982C','#46982C','#46982C','#46982C','#46982C','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#933379','#933379','#933379','#933379','#933379','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#9978ff','#9978ff','#9978ff','#9978ff']
 
 //var variables = ["variable 1", "variable 2"]
-var variables = ['agnddf_v1_5_10yrs', 'alt_dust_v1_5_10yrs', 'alt_roll_mod2_dust_sdf_0_20_v1_5_10yrs', 'baseline_2snaps_v1_5_10yrs',
- 'baseline_samefilt_v1_5_10yrs', 'baseline_v1_5_10yrs', 'bulges_bs_v1_5_10yrs', 'bulges_bulge_wfd_v1_5_10yrs',
- 'bulges_cadence_bs_v1_5_10yrs', 'bulges_cadence_bulge_wfd_v1_5_10yrs', 'bulges_cadence_i_heavy_v1_5_10yrs', 
- 'bulges_i_heavy_v1_5_10yrs', 'daily_ddf_v1_5_10yrs', 'dcr_nham1_ug_v1_5_10yrs', 'dcr_nham1_ugr_v1_5_10yrs',
+variables =['agnddf_v1_5_10yrs',
+ 'alt_dust_v1_5_10yrs',
+ 'alt_roll_mod2_dust_sdf_0_20_v1_5_10yrs',
+ 'baseline_2snaps_v1_5_10yrs',
+ 'baseline_samefilt_v1_5_10yrs',
+ 'baseline_v1_5_10yrs',
+ 'bulges_bs_v1_5_10yrs',
+ 'bulges_bulge_wfd_v1_5_10yrs',
+ 'bulges_cadence_bs_v1_5_10yrs',
+ 'bulges_cadence_bulge_wfd_v1_5_10yrs',
+ 'bulges_cadence_i_heavy_v1_5_10yrs',
+ 'bulges_i_heavy_v1_5_10yrs',
+ 'daily_ddf_v1_5_10yrs',
+ 'dcr_nham1_ug_v1_5_10yrs',
+ 'dcr_nham1_ugr_v1_5_10yrs',
  'dcr_nham1_ugri_v1_5_10yrs',
  'dcr_nham2_ug_v1_5_10yrs',
  'dcr_nham2_ugr_v1_5_10yrs',
@@ -123,6 +147,7 @@ var variables = ['agnddf_v1_5_10yrs', 'alt_dust_v1_5_10yrs', 'alt_roll_mod2_dust
  'goodseeing_gz_v1_5_10yrs',
  'goodseeing_i_v1_5_10yrs',
  'greedy_footprint_v1_5_10yrs',
+ 'roll_mod2_dust_sdf_0_20_v1_5_10yrs',
  'rolling_mod2_sdf_0_10_v1_5_10yrs',
  'rolling_mod2_sdf_0_20_v1_5_10yrs',
  'rolling_mod3_sdf_0_10_v1_5_10yrs',
@@ -162,7 +187,6 @@ var variables = ['agnddf_v1_5_10yrs', 'alt_dust_v1_5_10yrs', 'alt_roll_mod2_dust
  'wfd_depth_scale0_95_v1_5_10yrs',
  'wfd_depth_scale0_99_noddf_v1_5_10yrs',
  'wfd_depth_scale0_99_v1_5_10yrs']
-
 
 var color = d3.scaleOrdinal(families).domain(variables)
 
@@ -313,7 +337,14 @@ function update(){
                                       .style("stroke-width", "3")
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke-opacity", 1)
+
+                          d3.select("#radar_line"+tex)
+                            .style("stroke-width", "5")
+                            .style("stroke-opacity", 1)
       
+                          d3.selectAll('.barh'+tex)
+                              .style("opacity", 1)
+
                           //.transition().duration(200)
                           //.style("stroke", color(d))
                                } )
@@ -343,6 +374,15 @@ function update(){
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke-opacity", 1)
 
+                                    // select radar line
+                                    d3.select('#radar_line'+tex)
+                                      .style("stroke-width", "5")
+                                      .style("stroke-opacity", 1)
+
+                                    // select barh
+                                    d3.selectAll('.barh'+tex)
+                                      .style("opacity", 1)
+
                                       // update skymap
                                       plotskymap(pm_csv, tex)
 
@@ -359,9 +399,16 @@ function update(){
                                       //.style("fill", "#f7f7f7f7")
                                       .style("stroke-opacity", 0.2)
 
+                                    d3.selectAll('#radar_line'+tex)
+                                      .style("stroke-width", "1")
+                                      .style("stroke-opacity", 0.1)
+
+                                    // select barh
+                                    d3.selectAll('.barh'+tex)
+                                      .style("opacity", 0.2)
+
                                     d3.select("#dots"+tex).attr("r", 5).style("stroke-opacity", 0)
-      
-      
+
                                     })
       
         }
@@ -533,32 +580,295 @@ var mouseleave = function(d){
 // plot radar
 
 var height4 = 500
-var svg4 = d3.select("#radar")
-      .append("svg")
-      .attr("width", w2 + margin.left + margin.right)
-      .attr("height", height4 + margin.top + margin.bottom)
-      //.style("background-color", "rgba(128, 255, 128, 0.1)")
-      .style("background-color", "#f7f7f7f7")
-      .append("g")
-      .attr("transform", "translate("+margin.left+", "+margin.top+")")
 
+var centerXPos = w2 / 2 + margin.left;
+var centerYPos = height4 / 2 + margin.top;
+
+var svg4 = d3.select("#radar").append("svg")
+    .attr("width", w2 + margin.left + margin.right)
+    .attr("height", height4 + margin.top + margin.bottom)
+    .style("background-color", "#f7f7f7f7")
+    .append("g")
+    .attr("transform", "translate(" + centerXPos + ", " + centerYPos + ")")
+
+var maxValue = 1
+var topValue = 1.0 * maxValue;
+var ticks = [];
+for(i=0; i <=5;i+=1){
+  ticks[i] = topValue*i/5;
+}
+
+var circleConstraint = d3.min([height4, w2]);
+
+var radius = d3.scaleLinear().range([0, (circleConstraint / 2)])
+               .domain([0,topValue])
+
+var circleAxes = svg4.selectAll(".circle-ticks")
+      .data(ticks)
+      .enter().append("g")
+      .attr("class", "circle-ticks");
+   
+  circleAxes.append("svg:circle")
+      .attr("r", function(d) {return radius(d);})
+      .attr("class", "circle")
+      .style("stroke", "#CCC")
+      .style("fill", "none");
+
+  circleAxes.append("svg:text")
+      .attr("text-anchor", "middle")
+      .attr("dy", function(d) {return radius(d)})
+      .text(String);
+
+var csv_radar = "./data/df_pm_v15_t.csv"
+d3.csv(csv_radar).then( function(data) {
+
+    lineAxes = svg4.selectAll('.line-ticks')
+        .data(data)
+        .enter().append('svg:g')
+        .attr("transform", function (d, i) {
+            return "rotate(" + ((i / data.length * 360) - 90) +
+                ")translate(" + radius(topValue) + ")";
+        })
+        .attr("class", "line-ticks");
+  
+    lineAxes.append('svg:line')
+        .attr("x2", -1 * radius(topValue))
+        .style("stroke", "#CCC")
+        .style("fill", "none");
+  
+    lineAxes.append('svg:text')
+        .text(function(d) { return d.section; })
+        .attr("text-anchor", "middle") 
+        .attr("transform", function (d, i) {
+            return "rotate("+(90-(i*360/data.length))+")";
+        });
+  
+      // 
+
+    var lines = color.domain().map(function(name){
+          return (data.concat(data[0])).map(function(d){ 
+          return +d[name]; });
+    });
+    
+    var sets = svg4.selectAll(".series")
+          .data(variables)
+          .enter().append("g")
+          .attr("class", "series");
+
+        sets.append('svg:path')
+          .data(lines)
+          .attr("class", "line")
+          .attr("d", d3.lineRadial()
+                    .radius(function (d) {
+                        return radius(d);
+                    })
+                    .angle(function (d, i) {
+                      if (i == data.length) {
+                          i = 0;
+                      } //close the line
+                      return (i / data.length) * 2 * Math.PI;
+                  }))
+          .data(variables).attr("id", function(d){return "radar_line"+d} )
+          .style("stroke-width", 1)
+          .style("stroke-opacity", 0.1)
+          .style("fill","none")
+          .style("stroke", function(d,i){
+                                return color(d);
+                          })
+          .on("mouseover", function(d){
+                d3.select(this).style("stroke-width", 5).style("stroke-opacity", 1)
+                //d3.select("#"+d)
+
+                tooltip.style("visibility", "visible")
+                    .text( d )
+                    .style("top", (d3.event.pageY-10)+"px")
+                    .style("left",(d3.event.pageX+10)+"px")
+                    .style("opacity", 1) 
+              })
+          .on("mouseleave", function(d){
+                d3.select(this).style("stroke-width", 2).style("stroke-opacity", 0.1)
+                //d3.select("#"+d).style("stroke-opacity", 0.1)
+                tooltip.style("visibility", "hidden")
+
+               })
+  })
 
 
 // --------------------------------------------------------------------------
 // plot barh
 var height5 = height + height4 
+var margin_left = 250
 var svg5 = d3.select("#barh")
       .append("svg")
-      .attr("width", w + margin.left + margin.right)
+      .attr("width", w + margin_left + margin.right)
       .attr("height", height5 + margin.top + margin.bottom)
       //.style("background-color", "rgba(128, 255, 128, 0.1)")
       .style("background-color", "#f7f7f7f7")
       .append("g")
-      .attr("transform", "translate("+margin.left+", "+margin.top+")")
+      .attr("transform", "translate("+margin_left+", "+margin.top+")")
+
+// add axis
+
+// add axis, set range and ticks, append to svg
+var x5 = d3.scaleLinear().domain([0, 3]).range([0, w])
+var y5 = d3.scaleBand().domain(variables).range([0, height5])
+var xAxis5 = d3.axisBottom(x5).tickValues([0, 1, 2, 3]).tickFormat(d3.format(".1f"))
+svg5.append("g").attr("id", "xaxis").attr("transform", "translate(0, "+height5+")").call(xAxis5)
+
+//svg5.append("g").attr("transform", "translate(0, "+height5+")").call(xAxis5)
+//svg5.append("g").attr("transform", "translate(0, 0)").call(d3.axisLeft(y5))
+
+var csv_barh = "./data/df_pm_v15.csv"
+
+function update_barh(){
+
+        // remove previous plots
+        d3.select(".bar1_rect").remove()
+        d3.select(".bar2_rect").remove()
+        d3.select(".bar3_rect").remove()
+
+        d3.select("#barh").selectAll("#yaxis").remove()
+        //d3.select("#barh").selectAll("text").remove()
+
+        // get value from <select> tag 
+        var barh_sortby = d3.select("#barh_sortby").property("value")
+        var barh_order = d3.select("#barh_order").property("value")
+      
+        d3.csv(csv_barh)
+          .then( function(data){
+        
+                data.sort(function(a,b){
+                  
+              if (barh_order=='ascending'){
+                  if(barh_sortby=='TPM'){ return d3.ascending(a.TPM, b.TPM)}
+                  else if(barh_sortby=='LS'){ return d3.ascending(a.LS, b.LS)}
+                  else if(barh_sortby=='CI'){ return d3.ascending(a.CI, b.CI)}
+                  else if(barh_sortby=='Sum'){ return d3.ascending(a.TPM*1+ a.LS*1+ a.CI*1, b.TPM*1+ b.LS*1+ b.CI*1)}
+                  else if(barh_sortby=='name'){ return d3.ascending(a.db, b.db)}
+
+                }
+              else{
+                  if(barh_sortby=='TPM'){ return d3.descending(a.TPM, b.TPM)}
+                  else if(barh_sortby=='LS'){ return d3.descending(a.LS, b.LS)}
+                  else if(barh_sortby=='CI'){ return d3.descending(a.CI, b.CI)}
+                  else if(barh_sortby=='Sum'){ return d3.descending(a.TPM*1+ a.LS*1+ a.CI*1, b.TPM*1+ b.LS*1+ b.CI*1)}
+                  else if(barh_sortby=='name'){ return d3.descending(a.db, b.db)}
+
+                }
+      
+                  })
+
+        
+                //console.log(data[0])
+                y5.domain(data.map(d=>d.db))
+                svg5.append("g").attr("id", "yaxis").attr("transform", "translate(0, 0)").call(d3.axisLeft(y5))
+
+                svg5.append("g").attr("class", "bar1_rect")
+                    .selectAll("bar1")
+                    .data(data) 
+                    .enter()
+                    .append("rect")
+                    .attr("class", d=>"barh"+d.db )
+                    .attr("x", 0)
+                    .attr("y", d=>y5(d.db)+5 )
+                    .attr("width", d=>x5(d.TPM) )
+                    .attr("height", 5)
+                    .attr("id", d=>"TPM="+d.TPM)
+                    .style("fill", "red")
+                    .style("opacity", 0.2)
+                    .on("mouseover", bar_mouseover)
+                    .on("mouseleave", bar_mouseleave)
+        
+                svg5.append("g").attr("class", "bar2_rect")
+                    .selectAll("bar2")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("class", d=>"barh"+d.db)
+                    .attr("x", d=>x5(d.TPM))
+                    .attr("y", d=>y5(d.db) + 5 )
+                    .attr("width", d=>x5(d.LS) )
+                    .attr("height", 5)        
+                    .attr("id", d=>"LS="+d.LS)
+                    .style("fill", "blue")
+                    .style("opacity", 0.2)
+                    .on("mouseover", bar_mouseover)
+                    .on("mouseleave", bar_mouseleave)
+        
+                svg5.append("g").attr("class", "bar3_rect")
+                    .selectAll("bar3")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("class", d=>"barh"+d.db)
+                    .attr("x", d=>x5(d.TPM*1+d.LS*1))
+                    .attr("y", d=>y5(d.db) + 5 )
+                    .attr("width", d=>x5(d.CI) )
+                    .attr("height", 5)
+                    .attr("id", d=>"CI="+d.CI)
+                    .style("fill", "green")
+                    .style("opacity", 0.2)
+                    .on("mouseover", bar_mouseover)
+                    .on("mouseleave", bar_mouseleave)
+        
+            })
 
 
+}
+append_barh_legend()
+
+function append_barh_legend(){
+              var legendx = 600
+              // add legend
+              svg5.append("rect").attr("id", "bar1_rect")
+                .attr("x", legendx).attr("y", 10).attr("width",25).attr("height", 5).attr("fill", "red")
+                .on("mouseover", legend_click).on("mouseleave", legend_dblclick)
+              svg5.append("text").attr("id", "bar1_text").attr("x", legendx+30).attr("y", 15)
+                  .text("TPM").style("font-size", "12px")
+              
+              svg5.append("rect").attr("id", "bar2_rect")
+                .attr("x", legendx).attr("y", 30).attr("width",25).attr("height", 5).attr("fill", "blue")
+                .on("mouseover", legend_click).on("mouseleave", legend_dblclick)
+              svg5.append("text").attr("id", "bar2_text").attr("x", legendx+30).attr("y", 35)
+                  .text("LS").style("font-size", "12px")
+              
+              svg5.append("rect").attr("id", "bar3_rect")
+                .attr("x", legendx).attr("y", 50).attr("width",25).attr("height",5).attr("fill", "green")
+                .on("mouseover", legend_click).on("mouseleave", legend_dblclick)
+              svg5.append("text").attr("id", "bar3_text").attr("x", legendx+30).attr("y", 55)
+                  .text("CI").style("font-size", "12px")
+        }
+
+function legend_click(){
+                    d3.select("."+this.id).selectAll("rect").style("opacity", 1)
+          }
+
+function legend_dblclick(){
+                  console.log(this.id)
+                  d3.select("."+this.id).selectAll("rect").style("opacity", 0.2)
+          }
+
+function bar_mouseover(d){
+                  //console.log(this.id)
+                  d3.select(this).style("opacity", 1)
+                  tooltip.style("visibility", "visible")
+                        .text( this.id )
+                        .style("top", (d3.event.pageY-10)+"px")
+                        .style("left",(d3.event.pageX+10)+"px")
+                        .style("opacity", 1) 
+          }
+function bar_mouseleave(d){
+                  d3.select(this).style("opacity", 0.2)
+                  tooltip.style("visibility", "hidden")
+
+         }
+
+update_barh()
+// update when any select changes
+d3.selectAll("select").on("change", function(){ update_barh() } )
+
+svg5.append("select")
 </script>
 
 </body>
 </html>
-
