@@ -53,7 +53,7 @@ var height = 500 - margin.top  - margin.bottom
 //var csvfile = "./data/iris.csv"
 //var csvfile = "./data/df_rank.csv"
 //var csvfile = "./data/df_radar_wfd.csv"
-var csv_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_wfd.csv"
+var csv_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data/df_para.csv"
 var csv_GP_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_GP_inwfd.csv"
 var csv_LMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_LMC_inwfd.csv"
 var csv_SMC_wfd = "https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/tdAnom/data_v1_5/df_radar_SMC_inwfd.csv"
@@ -81,7 +81,7 @@ var color = d3.scaleOrdinal()
 
 //dimensions = ["brightness","color", "depth", "footprint", "star density"]
 
-dimensions = ["flux change","color", "depth", "footprint", "star count"]
+dimensions = ["Nv","linear uniform", "log uniform", "log normal"]
 
 // append svg to body
 var svg = d3.select("#rank")
@@ -109,8 +109,8 @@ var y = {}
 for (i in dimensions){
 	name = dimensions[i]
 	y[name] = d3.scaleLinear()
-				//.domain([0, 86])  // same range for each group
-        .domain([0, 1])
+				.domain([0, 86])  // same range for each group
+        //.domain([0, 1])
 				.range([height, 0])
 }
 
@@ -139,7 +139,7 @@ function update(csvfile){
 	//d3.selectAll("#csvlink").text(csvfile)
   document.getElementById('csvlink').value = csvfile;
 
-  var ymax = 1
+  var ymax = 86
   //var y = {}
   for (i in dimensions){
     name = dimensions[i]
