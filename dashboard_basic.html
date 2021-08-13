@@ -17,36 +17,20 @@
 <h2>Histogram chart for LSST OpSims</h2>
 <p>Click line to highlight, double click to cancel. Click the legend dots to select families. Mouseover legend text to preview. Mouseleave legend text to clear selections.</p>
 
-<p>Enter links to csv files (make sure same format as <a href= "https://github.com/fedhere/LSSTunknowns/blob/master/tdAnom/data_v1_5/df_radar_wfd_t.csv"> this example</a>) then click Plot:</p>
-
-<div>
-<span>csv for histogram </span><textarea id="csvlink_hist" cols="60" ></textarea>
-<span>csv for skymap </span>  <textarea id="csvlink_skymap" cols="60" ></textarea>
-</div>
-<div>
-<span>csv for radar </span><textarea id="csvlink_radar" cols="60" >./data/df_pm_v15_t.csv</textarea>
-<span>csv for radar </span><textarea id="csvlink_barh" cols="60" >./data/df_pm_v15.csv</textarea>
-</div>
-
-<button  class="plotbutton" onclick="update_dashboard()" > Update Dashboard </button>
-
 <div class="slider item">
       <div id="selected_nbins">number of bins </div>
       <div><span class="low">10</span> 
            <input type="range" id='nbins_slider' name="scale" min="10" max="100" step='1' value="50"> 
            <span>100</span></div>
-      <div> <input type="checkbox" id="normCheckbox"> Normalized to 1
-      </div>
 </div>
 <button class="button" onclick = "update()">Update</button>
 
-<table>
+  <table>
 <thead>
   <tr>
     <th id="hist"></th>
     <th id="legend"></th>
     <th id="barh" rowspan="2">
-    <div><span>Sort by</span>
       <select id="barh_sortby" >
         <option value="name" > name </option>
         <option value="TPM" selected=""> TPM </option>
@@ -58,20 +42,13 @@
         <option value="ascending" selected> ascending </option>
         <option value="descending" > descending </option>
       </select>
-    </div>
-
-    <div> <span> Weights: </span>
-      <span >TPM </span><input type="range" class="barhweight" id="wTPM" min=0 max=1 step=0.01 value=0.33>
-      <span>CI</span><input type="range" class="barhweight" id="wCI" min=0 max=1 step=0.01 value=0.33> 
-    </div>
-
     </th>
   </tr>
   <tr>
     <td id="skymap"></td>
     <td id="radar"></td>
   </tr>
-</table>
+  </table>
 
 <script type="text/javascript">
 var width = 900
@@ -243,12 +220,7 @@ function update(){
         var y2 = d3.scaleLinear()
                     .range([h, 0])
                     .domain([0, 1850])
-        if(d3.select("#normCheckbox").property("checked") ){
-             y2.domain([0, 1.05])
-            }
-        d3.select("#axisy2").remove()
-
-        svg.append("g").attr("id", "axisy2").attr("transform", "translate("+w+", 0)")
+          svg.append("g").attr("transform", "translate("+w+", 0)")
                 .call(d3.axisRight(y2))
       
         // set the parameters for the histogram
@@ -299,24 +271,13 @@ function update(){
                     {"linex":0.1, "liney":10 + v },
                     {"linex":0.2, "liney":50 + v },]
       
-            // get max length
-            var b_max = 0;
-            for (j in bins1){
-                      b_max +=  bins1[j].length
-                      //console.log(v + ' bins1 '+ b_max)
-            }
-            console.log(v, b_max)
-
             var h_cum = 0;
+      
             var line = d3.line().x(function(d){return x(d.x0)}) 
                                 .y(function(d, i){
                                             h_cum += d.length
                                             //console.log([v, h_cum])
-                                            if(d3.select("#normCheckbox").property("checked")){
-                                               return y2(h_cum/b_max) }
-                                            else{
-                                            return y2(h_cum)} }
-                                    )
+                                            return y2(h_cum)})
             
             svg.append("path")
                .datum(bins1)
@@ -455,7 +416,6 @@ function update(){
       })
 }
 
-//d3.select("#normCheckbox").on("change", update)
 //add a tooltip
 var tooltip = d3.select("body").append("div")
     .style("position", "absolute")
@@ -615,38 +575,6 @@ var mouseleave = function(d){
   tooltip.style("visibility", "hidden")
 
 }
-// add colorbar
-var cbar_data = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
-svg3.append("g").attr("class", "skymap_cbar")
-    .selectAll("cbar")
-    .data(cbar_data) 
-    .enter()
-    .append("rect")
-    .attr("x", d=>x3(d*100))
-    .attr("y", d=>y3(-100) )
-    .attr("width", 20 )
-    .attr("height", 10)
-    .style("fill", d=>cmap(d) )
-    .style("opacity", 1)
-    .on("mouseover", function cbar_mouseover(d){
-                  //console.log(this.id)
-                  d3.select(this).style("opacity", 0.2)
-                  
-          })
-    .on("mouseleave", function cbar_mouseleave(d){
-                  d3.select(this).style("opacity", 1)
-                  tooltip.style("visibility", "hidden")
-         })
-
-var cbar_ticks = [0, , , , 0.5]
-svg3.append("g").attr("class", "skymap_cbar")
-    .selectAll("cbar_text")
-    .data(cbar_ticks) 
-    .enter()
-    .append("text")
-    .attr("x", d=>x3(d*100))
-    .attr("y", d=>y3(-110) )
-    .text(d=>d)
 
 // --------------------------------------------------------------------------
 // plot radar
@@ -691,82 +619,79 @@ var circleAxes = svg4.selectAll(".circle-ticks")
       .attr("dy", function(d) {return radius(d)})
       .text(String);
 
-//var csv_radar = "./data/df_pm_v15_t.csv"
+var csv_radar = "./data/df_pm_v15_t.csv"
+d3.csv(csv_radar).then( function(data) {
 
-function update_radar(csv_radar) {
-    d3.csv(csv_radar).then( function(data) {
-    
-        lineAxes = svg4.selectAll('.line-ticks')
-            .data(data)
-            .enter().append('svg:g')
-            .attr("transform", function (d, i) {
-                return "rotate(" + ((i / data.length * 360) - 90) +
-                    ")translate(" + radius(topValue) + ")";
-            })
-            .attr("class", "line-ticks");
-      
-        lineAxes.append('svg:line')
-            .attr("x2", -1 * radius(topValue))
-            .style("stroke", "#CCC")
-            .style("fill", "none");
-      
-        lineAxes.append('svg:text')
-            .text(function(d) { return d.section; })
-            .attr("text-anchor", "middle") 
-            .attr("transform", function (d, i) {
-                return "rotate("+(90-(i*360/data.length))+")";
-            });
-      
-          // 
-    
-        var lines = color.domain().map(function(name){
-              return (data.concat(data[0])).map(function(d){ 
-              return +d[name]; });
+    lineAxes = svg4.selectAll('.line-ticks')
+        .data(data)
+        .enter().append('svg:g')
+        .attr("transform", function (d, i) {
+            return "rotate(" + ((i / data.length * 360) - 90) +
+                ")translate(" + radius(topValue) + ")";
+        })
+        .attr("class", "line-ticks");
+  
+    lineAxes.append('svg:line')
+        .attr("x2", -1 * radius(topValue))
+        .style("stroke", "#CCC")
+        .style("fill", "none");
+  
+    lineAxes.append('svg:text')
+        .text(function(d) { return d.section; })
+        .attr("text-anchor", "middle") 
+        .attr("transform", function (d, i) {
+            return "rotate("+(90-(i*360/data.length))+")";
         });
-        
-        var sets = svg4.selectAll(".series")
-              .data(variables)
-              .enter().append("g")
-              .attr("class", "series");
+  
+      // 
+
+    var lines = color.domain().map(function(name){
+          return (data.concat(data[0])).map(function(d){ 
+          return +d[name]; });
+    });
     
-            sets.append('svg:path')
-              .data(lines)
-              .attr("class", "line")
-              .attr("d", d3.lineRadial()
-                        .radius(function (d) {
-                            return radius(d);
-                        })
-                        .angle(function (d, i) {
-                          if (i == data.length) {
-                              i = 0;
-                          } //close the line
-                          return (i / data.length) * 2 * Math.PI;
-                      }))
-              .data(variables).attr("id", function(d){return "radar_line"+d} )
-              .style("stroke-width", 1)
-              .style("stroke-opacity", 0.1)
-              .style("fill","none")
-              .style("stroke", function(d,i){
-                                    return color(d);
-                              })
-              .on("mouseover", function(d){
-                    d3.select(this).style("stroke-width", 5).style("stroke-opacity", 1)
-                    //d3.select("#"+d)
-    
-                    tooltip.style("visibility", "visible")
-                        .text( d )
-                        .style("top", (d3.event.pageY-10)+"px")
-                        .style("left",(d3.event.pageX+10)+"px")
-                        .style("opacity", 1) 
-                  })
-              .on("mouseleave", function(d){
-                    d3.select(this).style("stroke-width", 2).style("stroke-opacity", 0.1)
-                    //d3.select("#"+d).style("stroke-opacity", 0.1)
-                    tooltip.style("visibility", "hidden")
-    
-                   })
-      })
-}
+    var sets = svg4.selectAll(".series")
+          .data(variables)
+          .enter().append("g")
+          .attr("class", "series");
+
+        sets.append('svg:path')
+          .data(lines)
+          .attr("class", "line")
+          .attr("d", d3.lineRadial()
+                    .radius(function (d) {
+                        return radius(d);
+                    })
+                    .angle(function (d, i) {
+                      if (i == data.length) {
+                          i = 0;
+                      } //close the line
+                      return (i / data.length) * 2 * Math.PI;
+                  }))
+          .data(variables).attr("id", function(d){return "radar_line"+d} )
+          .style("stroke-width", 1)
+          .style("stroke-opacity", 0.1)
+          .style("fill","none")
+          .style("stroke", function(d,i){
+                                return color(d);
+                          })
+          .on("mouseover", function(d){
+                d3.select(this).style("stroke-width", 5).style("stroke-opacity", 1)
+                //d3.select("#"+d)
+
+                tooltip.style("visibility", "visible")
+                    .text( d )
+                    .style("top", (d3.event.pageY-10)+"px")
+                    .style("left",(d3.event.pageX+10)+"px")
+                    .style("opacity", 1) 
+              })
+          .on("mouseleave", function(d){
+                d3.select(this).style("stroke-width", 2).style("stroke-opacity", 0.1)
+                //d3.select("#"+d).style("stroke-opacity", 0.1)
+                tooltip.style("visibility", "hidden")
+
+               })
+  })
 
 
 // --------------------------------------------------------------------------
@@ -785,17 +710,17 @@ var svg5 = d3.select("#barh")
 // add axis
 
 // add axis, set range and ticks, append to svg
-var x5 = d3.scaleLinear().domain([0, 1]).range([0, w])
+var x5 = d3.scaleLinear().domain([0, 3]).range([0, w])
 var y5 = d3.scaleBand().domain(variables).range([0, height5])
-var xAxis5 = d3.axisBottom(x5).tickValues([0, 0.5, 1]).tickFormat(d3.format(".1f"))
+var xAxis5 = d3.axisBottom(x5).tickValues([0, 1, 2, 3]).tickFormat(d3.format(".1f"))
 svg5.append("g").attr("id", "xaxis").attr("transform", "translate(0, "+height5+")").call(xAxis5)
 
 //svg5.append("g").attr("transform", "translate(0, "+height5+")").call(xAxis5)
 //svg5.append("g").attr("transform", "translate(0, 0)").call(d3.axisLeft(y5))
 
-//var csv_barh = "./data/df_pm_v15.csv"
+var csv_barh = "./data/df_pm_v15.csv"
 
-function update_barh(csv_barh){
+function update_barh(){
 
         // remove previous plots
         d3.select(".bar1_rect").remove()
@@ -809,22 +734,10 @@ function update_barh(csv_barh){
         var barh_sortby = d3.select("#barh_sortby").property("value")
         var barh_order = d3.select("#barh_order").property("value")
       
-        d3.csv(csv_barh, function(d){
-                // function to format csv data
-                //map barh data based on weights
-                  var wtpm = d3.select("#wTPM").property("value")
-                  var wci = d3.select("#wCI").property("value")
-                  console.log("wtpm"+wtpm)
-                  return { 'db': d.db,
-                           'TPM': d.TPM*wtpm,
-                           'CI': d.CI*wci,
-                           'LS': d.LS*(1-wtpm-wci)
-                           }
-                }
-              )
+        d3.csv(csv_barh)
           .then( function(data){
-
-              data.sort(function(a,b){
+        
+                data.sort(function(a,b){
                   
               if (barh_order=='ascending'){
                   if(barh_sortby=='TPM'){ return d3.ascending(a.TPM, b.TPM)}
@@ -842,8 +755,10 @@ function update_barh(csv_barh){
                   else if(barh_sortby=='name'){ return d3.descending(a.db, b.db)}
 
                 }
-                })
+      
+                  })
 
+        
                 //console.log(data[0])
                 y5.domain(data.map(d=>d.db))
                 svg5.append("g").attr("id", "yaxis").attr("transform", "translate(0, 0)").call(d3.axisLeft(y5))
@@ -948,36 +863,11 @@ function bar_mouseleave(d){
 
          }
 
-
+update_barh()
 // update when any select changes
-d3.selectAll("select").on("change", function(){ update_barh(document.getElementById("csvlink_radar").value) } )
+d3.selectAll("select").on("change", function(){ update_barh() } )
 
-d3.selectAll(".barhweight").on("change", function(){ update_barh(document.getElementById("csvlink_radar").value) } )
-
-
-//svg5.append("select")
-
-
-// update csv files
-
-function update_dashboard(){
-
-    var inputcsv_hist = document.getElementById("csvlink_hist").value
-    var inputcsv_skymap = document.getElementById("csvlink_skymap").value
-    var inputcsv_radar = document.getElementById("csvlink_radar").value
-    var inputcsv_barh = document.getElementById("csvlink_barh").value
-    
-    update_radar(inputcsv_radar)
-    update_barh(inputcsv_barh)
-
-
-    //document.getElementById('csvlink').value = csvfile;
-
-
-}
-
-update_dashboard()
-
+svg5.append("select")
 </script>
 
 </body>
