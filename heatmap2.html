@@ -22,9 +22,9 @@
 <script type="text/javascript", src="./js/d3/d3.js"></script>
 
 <script type="text/javascript">
-var margin = {top:100, right:100, bottom:100, left:100}
-var width = 600 - margin.left - margin.right
-var height = 500 - margin.top  - margin.bottom
+var margin = {top:100, right:200, bottom:200, left:300}
+var width = 1000 - margin.left - margin.right
+var height = 3200 - margin.top  - margin.bottom
 
 // append svg to body
 var svg = d3.select("#heatmap")
@@ -36,20 +36,308 @@ var svg = d3.select("#heatmap")
 			.attr("transform", "translate(" + margin.left +", "+ margin.top +")")
 
 // Labels of row and columns
-var opsims = ["baseline", "rolling", "C", "D", "E", "F", "G", "H", "I", "J"]
-var metrics = ["Nv", "Median", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
+//var opsims = ["base line", "rolling", "C", "D", "E", "F", "G", "H", "I", "J"]
+//var metrics = ["Nv", "Median", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"]
+
+var opsims = ['baseline_retrofoot_v2_0_10yrs',
+ 'baseline_v2_0_10yrs',
+ 'baseline_v2_1_10yrs',
+ 'bluer_indx0_v2_0_10yrs',
+ 'bluer_indx1_v2_0_10yrs',
+ 'carina_v2_0_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_1_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_1_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_1_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_2_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_2_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_2_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_3_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_3_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_3_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_4_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_4_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_05_lsf0_4_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_1_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_1_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_1_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_2_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_2_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_2_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_3_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_3_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_3_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_4_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_4_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_10_lsf0_4_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_3_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_3_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_3_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_4_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_4_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_20_lsf0_4_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_3_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_3_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_3_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_4_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_4_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_25_lsf0_4_lsr0_5_v2_1_10yrs',
+ 'ddf_accourd_sf0_30_lsf0_4_lsr0_1_v2_1_10yrs',
+ 'ddf_accourd_sf0_30_lsf0_4_lsr0_3_v2_1_10yrs',
+ 'ddf_accourd_sf0_30_lsf0_4_lsr0_5_v2_1_10yrs',
+ 'ddf_bright_slf0_10_v2_1_10yrs',
+ 'ddf_bright_slf0_15_v2_1_10yrs',
+ 'ddf_bright_slf0_20_v2_1_10yrs',
+ 'ddf_bright_slf0_25_v2_1_10yrs',
+ 'ddf_bright_slf0_30_v2_1_10yrs',
+ 'ddf_bright_slf0_35_v2_1_10yrs',
+ 'ddf_deep_rolling_slf0_20_v2_1_10yrs',
+ 'ddf_deep_u_slf0_20_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_01_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_05_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_10_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_25_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_50_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md0_70_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md1_00_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md1_50_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md2_50_v2_1_10yrs',
+ 'ddf_dither_size_slf0_20_md3_50_v2_1_10yrs',
+ 'ddf_double_slf0_10_v2_1_10yrs',
+ 'ddf_double_slf0_15_v2_1_10yrs',
+ 'ddf_double_slf0_20_v2_1_10yrs',
+ 'ddf_double_slf0_25_v2_1_10yrs',
+ 'ddf_double_slf0_30_v2_1_10yrs',
+ 'ddf_double_slf0_35_v2_1_10yrs',
+ 'ddf_early_deep_slf0_20_f10_60_f20_70_v2_1_10yrs',
+ 'ddf_early_deep_slf0_20_f10_60_f20_75_v2_1_10yrs',
+ 'ddf_early_deep_slf0_20_f10_60_f20_80_v2_1_10yrs',
+ 'ddf_euclid_moved_slf0_20_v2_1_10yrs',
+ 'ddf_frac_ddf_per0_6_v2_0_10yrs',
+ 'ddf_frac_ddf_per1_6_v2_0_10yrs',
+ 'ddf_old_rot_slf0_10_v2_1_10yrs',
+ 'ddf_old_rot_slf0_15_v2_1_10yrs',
+ 'ddf_old_rot_slf0_20_v2_1_10yrs',
+ 'ddf_old_rot_slf0_25_v2_1_10yrs',
+ 'ddf_old_rot_slf0_30_v2_1_10yrs',
+ 'ddf_old_rot_slf0_35_v2_1_10yrs',
+ 'ddf_quad_slf0_10_v2_1_10yrs',
+ 'ddf_quad_slf0_15_v2_1_10yrs',
+ 'ddf_quad_slf0_20_v2_1_10yrs',
+ 'ddf_quad_slf0_25_v2_1_10yrs',
+ 'ddf_quad_slf0_30_v2_1_10yrs',
+ 'ddf_quad_slf0_35_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_10_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_15_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_20_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_25_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_30_v2_1_10yrs',
+ 'ddf_quad_subfilter_slf0_35_v2_1_10yrs',
+ 'ddf_roll_slf0_20_v2_1_10yrs',
+ 'ddf_season_length_slf0_10_v2_1_10yrs',
+ 'ddf_season_length_slf0_15_v2_1_10yrs',
+ 'ddf_season_length_slf0_20_v2_1_10yrs',
+ 'ddf_season_length_slf0_25_v2_1_10yrs',
+ 'ddf_season_length_slf0_30_v2_1_10yrs',
+ 'ddf_season_length_slf0_35_v2_1_10yrs',
+ 'good_seeing_gsw0_0_v2_1_10yrs',
+ 'good_seeing_gsw10_0_v2_1_10yrs',
+ 'good_seeing_gsw1_0_v2_1_10yrs',
+ 'good_seeing_gsw20_0_v2_1_10yrs',
+ 'good_seeing_gsw3_0_v2_1_10yrs',
+ 'good_seeing_gsw50_0_v2_1_10yrs',
+ 'good_seeing_gsw6_0_v2_1_10yrs',
+ 'good_seeing_u_gsw0_0_v2_1_10yrs',
+ 'good_seeing_u_gsw10_0_v2_1_10yrs',
+ 'good_seeing_u_gsw1_0_v2_1_10yrs',
+ 'good_seeing_u_gsw20_0_v2_1_10yrs',
+ 'good_seeing_u_gsw3_0_v2_1_10yrs',
+ 'good_seeing_u_gsw50_0_v2_1_10yrs',
+ 'good_seeing_u_gsw6_0_v2_1_10yrs',
+ 'local_gal_bindx0_v2_0_10yrs',
+ 'local_gal_bindx1_v2_0_10yrs',
+ 'local_gal_bindx2_v2_0_10yrs',
+ 'long_gaps_nightsoff0_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff0_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff1_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff1_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff2_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff2_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff3_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff3_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff4_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff4_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff5_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff5_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff6_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff6_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff7_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff7_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff0_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff0_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff1_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff1_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff2_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff2_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff3_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff3_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff4_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff4_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff5_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff5_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff6_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff6_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff7_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff7_delayed1827_v2_0_10yrs',
+ 'long_u1_v2_0_10yrs',
+ 'long_u2_v2_0_10yrs',
+ 'march_start_v2_1_10yrs',
+ 'multi_short_v2_0_10yrs',
+ 'no_repeat_rpw-100_0_v2_1_10yrs',
+ 'no_repeat_rpw-10_0_v2_1_10yrs',
+ 'no_repeat_rpw-1_0_v2_1_10yrs',
+ 'no_repeat_rpw-20_0_v2_1_10yrs',
+ 'no_repeat_rpw-2_0_v2_1_10yrs',
+ 'no_repeat_rpw-5_0_v2_1_10yrs',
+ 'noroll_v2_0_10yrs',
+ 'north_stripe_v2_0_10yrs',
+ 'pencil_fs1_v2_1_10yrs',
+ 'pencil_fs2_v2_1_10yrs',
+ 'plane_priority_priority0_1_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_1_pbt_v2_1_10yrs',
+ 'plane_priority_priority0_2_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_2_pbt_v2_1_10yrs',
+ 'plane_priority_priority0_3_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_3_pbt_v2_1_10yrs',
+ 'plane_priority_priority0_4_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_4_pbt_v2_1_10yrs',
+ 'plane_priority_priority0_6_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_6_pbt_v2_1_10yrs',
+ 'plane_priority_priority0_9_pbf_v2_1_10yrs',
+ 'plane_priority_priority0_9_pbt_v2_1_10yrs',
+ 'plane_priority_priority1_2_pbf_v2_1_10yrs',
+ 'plane_priority_priority1_2_pbt_v2_1_10yrs',
+ 'presto_gap1_5_mix_v2_0_10yrs',
+ 'presto_gap1_5_v2_0_10yrs',
+ 'presto_gap2_0_mix_v2_0_10yrs',
+ 'presto_gap2_0_v2_0_10yrs',
+ 'presto_gap2_5_mix_v2_0_10yrs',
+ 'presto_gap2_5_v2_0_10yrs',
+ 'presto_gap3_0_mix_v2_0_10yrs',
+ 'presto_gap3_0_v2_0_10yrs',
+ 'presto_gap3_5_mix_v2_0_10yrs',
+ 'presto_gap3_5_v2_0_10yrs',
+ 'presto_gap4_0_mix_v2_0_10yrs',
+ 'presto_gap4_0_v2_0_10yrs',
+ 'presto_half_gap1_5_mix_v2_0_10yrs',
+ 'presto_half_gap1_5_v2_0_10yrs',
+ 'presto_half_gap2_0_mix_v2_0_10yrs',
+ 'presto_half_gap2_0_v2_0_10yrs',
+ 'presto_half_gap2_5_mix_v2_0_10yrs',
+ 'presto_half_gap2_5_v2_0_10yrs',
+ 'presto_half_gap3_0_mix_v2_0_10yrs',
+ 'presto_half_gap3_0_v2_0_10yrs',
+ 'presto_half_gap3_5_mix_v2_0_10yrs',
+ 'presto_half_gap3_5_v2_0_10yrs',
+ 'presto_half_gap4_0_mix_v2_0_10yrs',
+ 'presto_half_gap4_0_v2_0_10yrs',
+ 'retro_baseline_v2_0_10yrs',
+ 'roll_early_v2_0_10yrs',
+ 'rolling_all_sky_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_bulge_6_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_5_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_8_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_ns2_rw0_5_v2_0_10yrs',
+ 'rolling_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_ns3_rw0_5_v2_0_10yrs',
+ 'rolling_ns3_rw0_9_v2_0_10yrs',
+ 'roman_v2_0_10yrs',
+ 'shave_20_v2_1_10yrs',
+ 'shave_22_v2_1_10yrs',
+ 'shave_25_v2_1_10yrs',
+ 'shave_28_v2_1_10yrs',
+ 'shave_30_v2_1_10yrs',
+ 'shave_32_v2_1_10yrs',
+ 'shave_35_v2_1_10yrs',
+ 'shave_38_v2_1_10yrs',
+ 'shave_40_v2_1_10yrs',
+ 'short_exp_v2_0_10yrs',
+ 'six_rolling_ns6_rw0_5_v2_0_10yrs',
+ 'six_rolling_ns6_rw0_9_v2_0_10yrs',
+ 'smc_movie_v2_0_10yrs',
+ 'too_rate10_v2_0_10yrs',
+ 'too_rate50_v2_0_10yrs',
+ 'twilight_neo_nightpattern1v2_0_10yrs',
+ 'twilight_neo_nightpattern2v2_0_10yrs',
+ 'twilight_neo_nightpattern3v2_0_10yrs',
+ 'twilight_neo_nightpattern4v2_0_10yrs',
+ 'twilight_neo_nightpattern5v2_0_10yrs',
+ 'twilight_neo_nightpattern6v2_0_10yrs',
+ 'twilight_neo_nightpattern7v2_0_10yrs',
+ 'vary_expt_v2_0_10yrs',
+ 'vary_gp_gpfrac0_01_v2_0_10yrs',
+ 'vary_gp_gpfrac0_05_v2_0_10yrs',
+ 'vary_gp_gpfrac0_10_v2_0_10yrs',
+ 'vary_gp_gpfrac0_15_v2_0_10yrs',
+ 'vary_gp_gpfrac0_20_v2_0_10yrs',
+ 'vary_gp_gpfrac0_25_v2_0_10yrs',
+ 'vary_gp_gpfrac0_30_v2_0_10yrs',
+ 'vary_gp_gpfrac0_35_v2_0_10yrs',
+ 'vary_gp_gpfrac0_40_v2_0_10yrs',
+ 'vary_gp_gpfrac0_45_v2_0_10yrs',
+ 'vary_gp_gpfrac0_50_v2_0_10yrs',
+ 'vary_gp_gpfrac0_55_v2_0_10yrs',
+ 'vary_gp_gpfrac0_75_v2_0_10yrs',
+ 'vary_gp_gpfrac1_00_v2_0_10yrs',
+ 'vary_nes_nesfrac0_01_v2_0_10yrs',
+ 'vary_nes_nesfrac0_05_v2_0_10yrs',
+ 'vary_nes_nesfrac0_10_v2_0_10yrs',
+ 'vary_nes_nesfrac0_15_v2_0_10yrs',
+ 'vary_nes_nesfrac0_20_v2_0_10yrs',
+ 'vary_nes_nesfrac0_25_v2_0_10yrs',
+ 'vary_nes_nesfrac0_30_v2_0_10yrs',
+ 'vary_nes_nesfrac0_35_v2_0_10yrs',
+ 'vary_nes_nesfrac0_40_v2_0_10yrs',
+ 'vary_nes_nesfrac0_45_v2_0_10yrs',
+ 'vary_nes_nesfrac0_50_v2_0_10yrs',
+ 'vary_nes_nesfrac0_55_v2_0_10yrs',
+ 'vary_nes_nesfrac0_75_v2_0_10yrs',
+ 'vary_nes_nesfrac1_00_v2_0_10yrs',
+ 'virgo_cluster_v2_0_10yrs']
+
+ var metrics = ['Max NumberOfQuickRevisits  HealpixSlicer',
+ 'Max NumberOfQuickRevisits All sky HealpixSlicer',
+ 'Mean NumberOfQuickRevisits  HealpixSlicer',
+ 'Mean NumberOfQuickRevisits All sky HealpixSlicer',
+ 'Median NumberOfQuickRevisits  HealpixSlicer',
+ 'Median NumberOfQuickRevisits All sky HealpixSlicer',
+ 'Median SurfaceBrightLimit g HealpixSlicer',
+ 'Median SurfaceBrightLimit i HealpixSlicer',
+ 'Median SurfaceBrightLimit r HealpixSlicer',
+ 'Median SurfaceBrightLimit u HealpixSlicer',
+ 'Median SurfaceBrightLimit y HealpixSlicer',
+ 'Median SurfaceBrightLimit z HealpixSlicer',
+ 'Min NumberOfQuickRevisits  HealpixSlicer',
+ 'Min NumberOfQuickRevisits All sky HealpixSlicer',
+ 'N(+3Sigma) NumberOfQuickRevisits  HealpixSlicer',
+ 'N(+3Sigma) NumberOfQuickRevisits All sky HealpixSlicer',
+ 'N(-3Sigma) NumberOfQuickRevisits  HealpixSlicer',
+ 'N(-3Sigma) NumberOfQuickRevisits All sky HealpixSlicer',
+ 'Rms NumberOfQuickRevisits  HealpixSlicer',
+ 'Rms NumberOfQuickRevisits All sky HealpixSlicer']
 
 //build scales and axis
 var x = d3.scaleBand()
 			.range([0, width])
 			.domain(metrics)
 			.padding(0.01);
+
 svg.append("g")
 	.attr("transform", "translate(0, " + height +")")
 	.call(d3.axisBottom(x))
 	.selectAll("text")
 	//.attr("y", "50")
-	//.attr("transform", "rotate(-90)")
+	.attr("transform", "rotate(-45)")
 	//.style("text-anchor", "end");
 
 var y = d3.scaleBand()
@@ -67,7 +355,7 @@ svg.append("g")
 //			.domain([0, 100])
 //var cmap = d3.scaleSequential(d3.interpolateSpectral).domain([100, 0])
 
-var cmap = d3.scaleSequential(d3.interpolateRdBu).domain([100, 0])
+var cmap = d3.scaleSequential(d3.interpolateRdBu).domain([1, 0])
 
 //var csvfile = "./data/heatmap_data.csv"
 //var csvfile = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
@@ -99,8 +387,8 @@ function update(csvfile){
 				   .on("mouseover", mouseover)
 				   .on("mouseleave", mouseleave)
 				   .style("stroke", "black")
-				   .style("stroke-width", 2)
-				   .style("stroke-opacity:1.0")
+				   .style("stroke-width", 1)
+				   .style("stroke-opacity:0.5")
 				})
 }
 
@@ -140,6 +428,7 @@ var mouseleave = function(d){
 
 //--- run the first load-----------
 
-update("./data/opsim/opsim_heatmap.csv")
+update("./data/opsim/runs_heatmap.csv")
+
 
 </script>

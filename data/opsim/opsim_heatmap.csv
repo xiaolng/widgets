@@ -1,14 +1,14 @@
 opsim,metric,value
-baseline,Nv,30
-baseline,Median,95
-baseline,v3,22
-baseline,v4,14
-baseline,v5,59
-baseline,v6,52
-baseline,v7,88
-baseline,v8,20
-baseline,v9,99
-baseline,v10,66
+base line,Nv,30
+base line,Median,95
+base line,v3,22
+base line,v4,14
+base line,v5,59
+base line,v6,52
+base line,v7,88
+base line,v8,20
+base line,v9,99
+base line,v10,66
 rolling,Nv,37
 rolling,Median,50
 rolling,v3,81
@@ -24,8 +24,8 @@ C,Median,13
 C,v3,98
 C,v4,10
 C,v5,86
-C,v6,23
-C,v7,74
+C,v6,
+C,v7,
 C,v8,47
 C,v9,73
 C,v10,40
