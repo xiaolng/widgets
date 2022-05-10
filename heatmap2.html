@@ -584,6 +584,8 @@ var tooltip = d3.select("body").append("div")
     .style("background", "white" )
     .style("opacity", 0.6)
 
+
+
  // mouseover function
  var mouseover = function(d) {
 	//console.log( proj( [-d.fieldRa, d.fieldDec] ) )
@@ -593,7 +595,8 @@ var tooltip = d3.select("body").append("div")
         .style("opacity", 0.5)
 
     tooltip.style("visibility", "visible")
-    		.text([d.opsim, d.metric, d.value])
+            .html([d.opsim, d.metric, d.value] + "<img src='https://www.lsst.org/sites/default/files/Main_Survey_2018_0.png'  height=150 width='auto' ></img><br>Fancy<br>")
+    		//.text([d.opsim, d.metric, d.value])
     		.style("top", (d3.event.pageY-10)+"px")
 	 	   .style("left",(d3.event.pageX+10)+"px")
 	 	   .style("opacity", 0.9)
