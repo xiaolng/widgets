@@ -107,103 +107,125 @@ var svg2 = d3.select("#legend").append("svg")
 //families = [ '#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#fdbf6f', '#ff7f00', '#cab2d6', '#6a3d9a', '#ffff99', '#b15928', '#004301', '#5e0022', '#ed00d7', '#00008f', '#626d60', '#9978ff', '#5b3600', '#00a799']
 //families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799']
 
-
-families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#b2df8a','#b2df8a','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#46982C','#46982C','#46982C','#46982C','#46982C','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#933379','#933379','#933379','#933379','#933379','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#004301','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#9978ff','#9978ff','#9978ff','#9978ff']
+// colors
+families = ['#00008f','#00008f','#00008f','#004301','#004301','#00a799','#00a799','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1f78b4','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#33a02c','#46982C','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5e0022','#5e0022','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60']
 
 //var variables = ["variable 1", "variable 2"]
-variables =['agnddf_v1_5_10yrs',
- 'alt_dust_v1_5_10yrs',
- 'alt_roll_mod2_dust_sdf_0_20_v1_5_10yrs',
- 'baseline_2snaps_v1_5_10yrs',
- 'baseline_samefilt_v1_5_10yrs',
- 'baseline_v1_5_10yrs',
- 'bulges_bs_v1_5_10yrs',
- 'bulges_bulge_wfd_v1_5_10yrs',
- 'bulges_cadence_bs_v1_5_10yrs',
- 'bulges_cadence_bulge_wfd_v1_5_10yrs',
- 'bulges_cadence_i_heavy_v1_5_10yrs',
- 'bulges_i_heavy_v1_5_10yrs',
- 'daily_ddf_v1_5_10yrs',
- 'dcr_nham1_ug_v1_5_10yrs',
- 'dcr_nham1_ugr_v1_5_10yrs',
- 'dcr_nham1_ugri_v1_5_10yrs',
- 'dcr_nham2_ug_v1_5_10yrs',
- 'dcr_nham2_ugr_v1_5_10yrs',
- 'dcr_nham2_ugri_v1_5_10yrs',
- 'descddf_v1_5_10yrs',
- 'filterdist_indx1_v1_5_10yrs',
- 'filterdist_indx2_v1_5_10yrs',
- 'filterdist_indx3_v1_5_10yrs',
- 'filterdist_indx4_v1_5_10yrs',
- 'filterdist_indx5_v1_5_10yrs',
- 'filterdist_indx6_v1_5_10yrs',
- 'filterdist_indx7_v1_5_10yrs',
- 'filterdist_indx8_v1_5_10yrs',
- 'footprint_add_mag_cloudsv1_5_10yrs',
- 'footprint_big_sky_dustv1_5_10yrs',
- 'footprint_big_sky_nouiyv1_5_10yrs',
- 'footprint_big_skyv1_5_10yrs',
- 'footprint_big_wfdv1_5_10yrs',
- 'footprint_bluer_footprintv1_5_10yrs',
- 'footprint_gp_smoothv1_5_10yrs',
- 'footprint_newAv1_5_10yrs',
- 'footprint_newBv1_5_10yrs',
- 'footprint_no_gp_northv1_5_10yrs',
- 'footprint_standard_goalsv1_5_10yrs',
- 'footprint_stuck_rollingv1_5_10yrs',
- 'goodseeing_gi_v1_5_10yrs',
- 'goodseeing_gri_v1_5_10yrs',
- 'goodseeing_griz_v1_5_10yrs',
- 'goodseeing_gz_v1_5_10yrs',
- 'goodseeing_i_v1_5_10yrs',
- 'greedy_footprint_v1_5_10yrs',
- 'roll_mod2_dust_sdf_0_20_v1_5_10yrs',
- 'rolling_mod2_sdf_0_10_v1_5_10yrs',
- 'rolling_mod2_sdf_0_20_v1_5_10yrs',
- 'rolling_mod3_sdf_0_10_v1_5_10yrs',
- 'rolling_mod3_sdf_0_20_v1_5_10yrs',
- 'rolling_mod6_sdf_0_10_v1_5_10yrs',
- 'rolling_mod6_sdf_0_20_v1_5_10yrs',
- 'short_exp_2ns_1expt_v1_5_10yrs',
- 'short_exp_2ns_5expt_v1_5_10yrs',
- 'short_exp_5ns_1expt_v1_5_10yrs',
- 'short_exp_5ns_5expt_v1_5_10yrs',
- 'spiders_v1_5_10yrs',
- 'third_obs_pt120v1_5_10yrs',
- 'third_obs_pt15v1_5_10yrs',
- 'third_obs_pt30v1_5_10yrs',
- 'third_obs_pt45v1_5_10yrs',
- 'third_obs_pt60v1_5_10yrs',
- 'third_obs_pt90v1_5_10yrs',
- 'twilight_neo_mod1_v1_5_10yrs',
- 'twilight_neo_mod2_v1_5_10yrs',
- 'twilight_neo_mod3_v1_5_10yrs',
- 'twilight_neo_mod4_v1_5_10yrs',
- 'u60_v1_5_10yrs',
- 'var_expt_v1_5_10yrs',
- 'wfd_depth_scale0_65_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_65_v1_5_10yrs',
- 'wfd_depth_scale0_70_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_70_v1_5_10yrs',
- 'wfd_depth_scale0_75_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_75_v1_5_10yrs',
- 'wfd_depth_scale0_80_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_80_v1_5_10yrs',
- 'wfd_depth_scale0_85_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_85_v1_5_10yrs',
- 'wfd_depth_scale0_90_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_90_v1_5_10yrs',
- 'wfd_depth_scale0_95_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_95_v1_5_10yrs',
- 'wfd_depth_scale0_99_noddf_v1_5_10yrs',
- 'wfd_depth_scale0_99_v1_5_10yrs']
+var variables = ['baseline_nexp2_v1_7_1_10yrs',
+ 'baseline_retrofoot_v2_0_10yrs',
+ 'baseline_v2_0_10yrs',
+ 'bluer_indx0_v2_0_10yrs',
+ 'bluer_indx1_v2_0_10yrs',
+ 'ddf_frac_ddf_per0_6_v2_0_10yrs',
+ 'ddf_frac_ddf_per1_6_v2_0_10yrs',
+ 'long_gaps_nightsoff0_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff0_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff1_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff1_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff2_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff2_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff3_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff3_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff4_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff4_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff5_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff5_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff6_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff6_delayed1827_v2_0_10yrs',
+ 'long_gaps_nightsoff7_delayed-1_v2_0_10yrs',
+ 'long_gaps_nightsoff7_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff0_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff0_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff1_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff1_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff2_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff2_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff3_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff3_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff4_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff4_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff5_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff5_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff6_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff6_delayed1827_v2_0_10yrs',
+ 'long_gaps_np_nightsoff7_delayed-1_v2_0_10yrs',
+ 'long_gaps_np_nightsoff7_delayed1827_v2_0_10yrs',
+ 'long_u1_v2_0_10yrs',
+ 'long_u2_v2_0_10yrs',
+ 'noroll_v2_0_10yrs',
+ 'presto_gap1_5_mix_v2_0_10yrs',
+ 'presto_gap1_5_v2_0_10yrs',
+ 'presto_gap2_0_mix_v2_0_10yrs',
+ 'presto_gap2_0_v2_0_10yrs',
+ 'presto_gap2_5_mix_v2_0_10yrs',
+ 'presto_gap2_5_v2_0_10yrs',
+ 'presto_gap3_0_mix_v2_0_10yrs',
+ 'presto_gap3_0_v2_0_10yrs',
+ 'presto_gap3_5_mix_v2_0_10yrs',
+ 'presto_gap3_5_v2_0_10yrs',
+ 'presto_gap4_0_mix_v2_0_10yrs',
+ 'presto_gap4_0_v2_0_10yrs',
+ 'presto_half_gap1_5_mix_v2_0_10yrs',
+ 'presto_half_gap1_5_v2_0_10yrs',
+ 'presto_half_gap2_0_mix_v2_0_10yrs',
+ 'presto_half_gap2_0_v2_0_10yrs',
+ 'presto_half_gap2_5_mix_v2_0_10yrs',
+ 'presto_half_gap2_5_v2_0_10yrs',
+ 'presto_half_gap3_0_mix_v2_0_10yrs',
+ 'presto_half_gap3_0_v2_0_10yrs',
+ 'presto_half_gap3_5_mix_v2_0_10yrs',
+ 'presto_half_gap3_5_v2_0_10yrs',
+ 'presto_half_gap4_0_mix_v2_0_10yrs',
+ 'presto_half_gap4_0_v2_0_10yrs',
+ 'retro_baseline_v2_0_10yrs',
+ 'roll_early_v2_0_10yrs',
+ 'rolling_all_sky_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_bulge_6_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_5_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_8_v2_0_10yrs',
+ 'rolling_bulge_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_ns2_rw0_5_v2_0_10yrs',
+ 'rolling_ns2_rw0_9_v2_0_10yrs',
+ 'rolling_ns3_rw0_5_v2_0_10yrs',
+ 'rolling_ns3_rw0_9_v2_0_10yrs',
+ 'six_rolling_ns6_rw0_5_v2_0_10yrs',
+ 'six_rolling_ns6_rw0_9_v2_0_10yrs',
+ 'vary_expt_v2_0_10yrs',
+ 'vary_gp_gpfrac0_01_v2_0_10yrs',
+ 'vary_gp_gpfrac0_05_v2_0_10yrs',
+ 'vary_gp_gpfrac0_10_v2_0_10yrs',
+ 'vary_gp_gpfrac0_15_v2_0_10yrs',
+ 'vary_gp_gpfrac0_20_v2_0_10yrs',
+ 'vary_gp_gpfrac0_25_v2_0_10yrs',
+ 'vary_gp_gpfrac0_30_v2_0_10yrs',
+ 'vary_gp_gpfrac0_35_v2_0_10yrs',
+ 'vary_gp_gpfrac0_40_v2_0_10yrs',
+ 'vary_gp_gpfrac0_45_v2_0_10yrs',
+ 'vary_gp_gpfrac0_50_v2_0_10yrs',
+ 'vary_gp_gpfrac0_55_v2_0_10yrs',
+ 'vary_gp_gpfrac0_75_v2_0_10yrs',
+ 'vary_gp_gpfrac1_00_v2_0_10yrs',
+ 'vary_nes_nesfrac0_01_v2_0_10yrs',
+ 'vary_nes_nesfrac0_05_v2_0_10yrs',
+ 'vary_nes_nesfrac0_10_v2_0_10yrs',
+ 'vary_nes_nesfrac0_15_v2_0_10yrs',
+ 'vary_nes_nesfrac0_20_v2_0_10yrs',
+ 'vary_nes_nesfrac0_25_v2_0_10yrs',
+ 'vary_nes_nesfrac0_30_v2_0_10yrs',
+ 'vary_nes_nesfrac0_35_v2_0_10yrs',
+ 'vary_nes_nesfrac0_40_v2_0_10yrs',
+ 'vary_nes_nesfrac0_45_v2_0_10yrs',
+ 'vary_nes_nesfrac0_50_v2_0_10yrs',
+ 'vary_nes_nesfrac0_55_v2_0_10yrs',
+ 'vary_nes_nesfrac0_75_v2_0_10yrs',
+ 'vary_nes_nesfrac1_00_v2_0_10yrs']
 
 var color = d3.scaleOrdinal(families).domain(variables)
 
 //csvfile = './data/data_doubleHist.csv'
 //csvfile = 'https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/pmAnom/TPM.csv'
-
-csvfile = './data/TPM.csv'
+// csvfile for histogram
+csvfile = './data/TPM_v20_10yrs.csv'
 
 function update(){ 
 
@@ -280,7 +302,7 @@ function update(){
                                 })
                   .style("fill", families[v])
                   .style("opacity", 0.004)
-      
+        
             // add line
             var linedata = [ {"linex":0, "liney":0 + v },
                     {"linex":0.1, "liney":10 + v },
@@ -334,7 +356,7 @@ function update(){
       
             // Handmade legend
             svg2.append("circle")
-              .attr("cx", function(d,i){if (v>variables.length/2){return 240-10} else {return 0} })
+              .attr("cx", function(d,i){if (v>variables.length/2){return 300-10} else {return 0} })
               .attr("cy", function(d,i){ if (v<=variables.length/2){return v*12} else {return (v-variables.length/2)*12} })      
               .attr("r", 5)
               .attr("id", "dots"+variables[v] )
@@ -378,7 +400,7 @@ function update(){
             svg2.append("text")
                 .attr("class", "legendtext"+variables[v])
                 .attr("x", function(){
-                              if (v<= variables.length/2) {return 10} else {return 240}  
+                              if (v<= variables.length/2) {return 10} else {return 300}  
                                     })
       
                 .attr("y", function(){
@@ -496,6 +518,8 @@ var cmap = d3.scaleSequential(d3.interpolateViridis).domain([0, 0.5])
 var proj = d3.geoMollweide().scale(160)
 
 //var nside16 = "./data/Fields_nside16.csv"
+
+
 var pm_csv = "./data/pm_skymap.csv"
 
 plotskymap(pm_csv, variables[0])
