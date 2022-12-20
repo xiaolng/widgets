@@ -62,7 +62,7 @@
 
 <script type="text/javascript">
 var width = 900
-var height = 800
+var height = 820
 
 var margin = {top: 70, right: 70, bottom: 70, left: 70},
     w = width - margin.left - margin.right,
@@ -108,16 +108,23 @@ var svg2 = d3.select("#legend").append("svg")
 //families = ['#a6cee3','#1f78b4','#1f78b4','#b2df8a','#b2df8a','#b2df8a','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#33a02c','#fb9a99','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#fdbf6f','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#ff7f00','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#cab2d6','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#6a3d9a','#ffff99','#b15928','#004301','#004301','#004301','#004301','#004301','#004301','#5e0022','#5e0022','#5e0022','#5e0022','#ed00d7','#00008f','#00008f','#00008f','#00008f','#00008f','#00008f','#626d60','#626d60','#626d60','#626d60','#9978ff','#5b3600','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799','#00a799']
 
 // colors
-families = ['#00008f','#00008f','#00008f','#004301','#004301','#00a799','#00a799','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1f78b4','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#33a02c','#46982C','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5e0022','#5e0022','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60']
+//families = ['#00008f','#00008f','#00008f','#004301','#004301','#00a799','#00a799','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1F87A7','#1f78b4','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#2A0319','#33a02c','#46982C','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5b3600','#5e0022','#5e0022','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60','#626d60']
+
+
+families = ['#00008f', '#00008f', '#004301', '#004301', '#00a799', '#1F87A7', '#1F87A7', '#1f78b4', '#1f78b4', '#1f78b4', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#2A0319', '#33a02c', '#46982C', '#5b3600', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#5e0022', '#626d60', '#6a3d9a', '#933379', '#933379', '#933379', '#933379', '#933379', '#933379', '#933379', '#933379', '#933379', '#9978ff', '#a6cee3', '#b2df8a', '#b2df8a', '#cab2d6', '#e31a1c', '#e31a1c', '#ed00d7', '#ed00d7', '#ed00d7', '#ed00d7', '#ed00d7', '#ed00d7', '#ed00d7', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fb9a99', '#fdbf6f']
+
 
 //var variables = ["variable 1", "variable 2"]
-var variables = ['baseline_nexp2_v1_7_1_10yrs',
- 'baseline_retrofoot_v2_0_10yrs',
+var variables = ['baseline_retrofoot_v2_0_10yrs',
  'baseline_v2_0_10yrs',
  'bluer_indx0_v2_0_10yrs',
  'bluer_indx1_v2_0_10yrs',
+ 'carina_v2_0_10yrs',
  'ddf_frac_ddf_per0_6_v2_0_10yrs',
  'ddf_frac_ddf_per1_6_v2_0_10yrs',
+ 'local_gal_bindx0_v2_0_10yrs',
+ 'local_gal_bindx1_v2_0_10yrs',
+ 'local_gal_bindx2_v2_0_10yrs',
  'long_gaps_nightsoff0_delayed-1_v2_0_10yrs',
  'long_gaps_nightsoff0_delayed1827_v2_0_10yrs',
  'long_gaps_nightsoff1_delayed-1_v2_0_10yrs',
@@ -152,7 +159,9 @@ var variables = ['baseline_nexp2_v1_7_1_10yrs',
  'long_gaps_np_nightsoff7_delayed1827_v2_0_10yrs',
  'long_u1_v2_0_10yrs',
  'long_u2_v2_0_10yrs',
+ 'multi_short_v2_0_10yrs',
  'noroll_v2_0_10yrs',
+ 'north_stripe_v2_0_10yrs',
  'presto_gap1_5_mix_v2_0_10yrs',
  'presto_gap1_5_v2_0_10yrs',
  'presto_gap2_0_mix_v2_0_10yrs',
@@ -188,8 +197,20 @@ var variables = ['baseline_nexp2_v1_7_1_10yrs',
  'rolling_ns2_rw0_9_v2_0_10yrs',
  'rolling_ns3_rw0_5_v2_0_10yrs',
  'rolling_ns3_rw0_9_v2_0_10yrs',
+ 'roman_v2_0_10yrs',
+ 'short_exp_v2_0_10yrs',
  'six_rolling_ns6_rw0_5_v2_0_10yrs',
  'six_rolling_ns6_rw0_9_v2_0_10yrs',
+ 'smc_movie_v2_0_10yrs',
+ 'too_rate10_v2_0_10yrs',
+ 'too_rate50_v2_0_10yrs',
+ 'twilight_neo_nightpattern1v2_0_10yrs',
+ 'twilight_neo_nightpattern2v2_0_10yrs',
+ 'twilight_neo_nightpattern3v2_0_10yrs',
+ 'twilight_neo_nightpattern4v2_0_10yrs',
+ 'twilight_neo_nightpattern5v2_0_10yrs',
+ 'twilight_neo_nightpattern6v2_0_10yrs',
+ 'twilight_neo_nightpattern7v2_0_10yrs',
  'vary_expt_v2_0_10yrs',
  'vary_gp_gpfrac0_01_v2_0_10yrs',
  'vary_gp_gpfrac0_05_v2_0_10yrs',
@@ -218,14 +239,15 @@ var variables = ['baseline_nexp2_v1_7_1_10yrs',
  'vary_nes_nesfrac0_50_v2_0_10yrs',
  'vary_nes_nesfrac0_55_v2_0_10yrs',
  'vary_nes_nesfrac0_75_v2_0_10yrs',
- 'vary_nes_nesfrac1_00_v2_0_10yrs']
+ 'vary_nes_nesfrac1_00_v2_0_10yrs',
+ 'virgo_cluster_v2_0_10yrs']
 
 var color = d3.scaleOrdinal(families).domain(variables)
 
 //csvfile = './data/data_doubleHist.csv'
 //csvfile = 'https://raw.githubusercontent.com/fedhere/LSSTunknowns/master/pmAnom/TPM.csv'
 // csvfile for histogram
-csvfile = './data/TPM_v20_10yrs.csv'
+csvfile = "./data/TPM_v20_10yrs.csv"
 
 function update(){ 
 
@@ -235,11 +257,12 @@ function update(){
 
       
       d3.csv(csvfile).then( function(data){
-      
+      console.log('data')
+      //console.log(data)
       
         // X axis: scale and draw:
         var x = d3.scaleLinear()
-            .domain([0, 0.5])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) {       return +d.price })
+            .domain([0, 0.35])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) {       return +d.price })
             .range([0, w]);
         svg.append("g")
             .attr("transform", "translate(0," + h + ")")
@@ -251,7 +274,7 @@ function update(){
         // Y axis: right
         var y2 = d3.scaleLinear()
                     .range([h, 0])
-                    .domain([0, 1850])
+                    .domain([0, 2500])
         if(d3.select("#normCheckbox").property("checked") ){
              y2.domain([0, 1.05])
             }
@@ -268,7 +291,9 @@ function update(){
 
         for (var v=0;v<variables.length;v++){
             // And apply twice this function to data to get the bins.
-            var bins1 = histogram(data.filter( function(d){return d.variable === variables[v]} ));
+            var bins1 = histogram(data.filter( function(d){
+                                    return d.variable === variables[v]} )
+                                );
             
 
             y.domain([0, d3.max(bins1, function(d) { return d.length*1.2; })]);   // d3.hist has to be called before the Y axis obviously
