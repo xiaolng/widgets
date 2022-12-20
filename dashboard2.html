@@ -545,7 +545,10 @@ var proj = d3.geoMollweide().scale(160)
 //var nside16 = "./data/Fields_nside16.csv"
 
 
-var pm_csv = "./data/pm_skymap.csv"
+//var pm_csv = "./data/pm_skymap.csv"
+
+var pm_csv = "./data/skymap_tpm_10yrs.csv"
+
 
 plotskymap(pm_csv, variables[0])
 coord = 'eq'
@@ -569,7 +572,7 @@ function plotskymap(csv_skymap, db){
               .attr("cx", function (d) { 
           
                 if (coord=="eq"){   
-                  var projx = proj( [-d.fieldRa, d.fieldDec] )[0];
+                  var projx = proj( [-d.fieldRA, d.fieldDec] )[0];
                   xLabel.text("RA");
                   }
           
@@ -583,7 +586,7 @@ function plotskymap(csv_skymap, db){
               .attr("cy", function (d) { 
           
                  if (coord=="eq"){   
-                  var projy = proj( [-d.fieldRa, d.fieldDec] )[1];
+                  var projy = proj( [-d.fieldRA, d.fieldDec] )[1];
                   yLabel.text("Dec"); }
           
                 else {
@@ -625,7 +628,7 @@ var yLabel = svg3.append("text")
 
  // mouseover function
  var mouseover = function(d) {
-  //console.log( proj( [-d.fieldRa, d.fieldDec] ) )
+  //console.log( proj( [-d.fieldRA, d.fieldDec] ) )
     d3.select(this)
         .style("stroke", "black")
         .style("stroke-opacity", 1)
